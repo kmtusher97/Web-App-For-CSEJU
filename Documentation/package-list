@@ -1,0 +1,8 @@
+org.ju.cse.cseju
+org.ju.cse.cseju.jaxb
+org.ju.cse.cseju.message
+org.ju.cse.cseju.syllabus.controller
+org.ju.cse.cseju.syllabus.model
+org.ju.cse.cseju.syllabus.model.content
+org.ju.cse.cseju.syllabus.repository
+org.ju.cse.cseju.syllabus.service

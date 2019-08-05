@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<courseStructure>
+    <name></name>
+    <contentBundles>
+        <contentBundle>
+            <selected>1</selected>
+            <table>
+                <title>Contents</title>
+                <fields>
+                    <field>Title</field>
+                    <field>Description</field>
+                </fields>
+                <rows/>
+            </table>
+            <textArea textAreaId="0">
+                <title>Untitled TextArea</title>
+                <textBody>Empty Text Body</textBody>
+            </textArea>
+        </contentBundle>
+        <contentBundle>
+            <selected>0</selected>
+            <table tableId="0">
+                <title>Untitled Table</title>
+                <fields>
+                    <field>Field0</field>
+                </fields>
+            </table>
+            <textArea>
+                <title>Course Summary</title>
+                <textBody>Empty Text Body</textBody>
+            </textArea>
+        </contentBundle>
+        <contentBundle>
+            <selected>0</selected>
+            <table tableId="0">
+                <title>Untitled Table</title>
+                <fields>
+                    <field>Field0</field>
+                </fields>
+            </table>
+            <textArea>
+                <title>Learnig Outcome </title>
+                <textBody>Empty Text Body</textBody>
+            </textArea>
+        </contentBundle>
+        <contentBundle>
+            <selected>1</selected>
+            <table>
+                <title>Untitled Table</title>
+                <fields>
+                    <field>Field0</field>
+                    <field>Field1</field>
+                    <field>Field2</field>
+                </fields>
+                <rows/>
+            </table>
+            <textArea textAreaId="0">
+                <title>Untitled TextArea</title>
+                <textBody>Empty Text Body</textBody>
+            </textArea>
+        </contentBundle>
+    </contentBundles>
+    <databaseName>test</databaseName>
+</courseStructure>
