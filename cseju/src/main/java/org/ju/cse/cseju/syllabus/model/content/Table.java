@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @XmlRootElement(name = "table")
 @XmlType(propOrder = {"title", "fields", "rows"})
-public class Table extends Content implements Serializable {
+public class Table implements Serializable {
 
     private Integer tableId;
 

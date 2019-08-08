@@ -17,7 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @XmlRootElement(name = "textArea")
 @XmlType(propOrder = {"title", "textBody"})
-public class TextArea extends Content implements Serializable {
+public class TextArea implements Serializable {
 
     private Integer textAreaId;
 
