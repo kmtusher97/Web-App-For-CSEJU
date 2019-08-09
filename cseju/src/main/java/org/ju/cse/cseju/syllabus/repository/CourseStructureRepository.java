@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author Kamrul Hasan
@@ -18,7 +19,41 @@ import java.io.IOException;
 public class CourseStructureRepository {
 
     private final static String EXTENSION = ".xml";
-    private final static String STORAGE_LOCATION = "src/main/resources/xml/form/";
+    private final static String STORAGE_LOCATION = "src/main/resources/xml/draft/courseStructures/";
+
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     * @return String databaseName
+     */
+    private String getDatabaseNameByCourseType(String syllabusName,
+                                               String courseType) {
+        return syllabusName + "_" + courseType;
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     */
+    public void create(String syllabusName, String courseType) {
+        String databaseName = getDatabaseNameByCourseType(syllabusName, courseType);
+        CourseStructure courseStructure = new CourseStructure(
+                courseType,
+                databaseName,
+                new ArrayList<>()
+        );
+
+        try {
+            File database = new File(STORAGE_LOCATION + databaseName + EXTENSION);
+            if (!database.exists()) {
+                database.createNewFile();
+            }
+            saveOrUpdate(databaseName, courseStructure);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * <p>Creates initial xml file with an object of CourseStructure</p>
@@ -76,7 +111,6 @@ public class CourseStructureRepository {
      * @return object of CourseStructure class from the xml DB
      */
     public CourseStructure getCourseStructure(String dataBaseName) {
-        CourseStructure courseStructure = null;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(CourseStructure.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -87,8 +121,7 @@ public class CourseStructureRepository {
                     throw new FileNotFoundException("Database Not Exits!");
                 }
 
-                courseStructure = (CourseStructure) unmarshaller.unmarshal(storageFile);
-                return courseStructure;
+                return (CourseStructure) unmarshaller.unmarshal(storageFile);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -96,6 +129,19 @@ public class CourseStructureRepository {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return courseStructure;
+        return null;
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     */
+    public void deleteDatabase(String syllabusName, String courseType) {
+        String databaseName = getDatabaseNameByCourseType(syllabusName, courseType);
+
+        File database = new File(STORAGE_LOCATION + databaseName + EXTENSION);
+        if (database.exists()) {
+            database.delete();
+        }
     }
 }

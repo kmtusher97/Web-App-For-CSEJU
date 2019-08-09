@@ -1,12 +1,16 @@
 package org.ju.cse.cseju.syllabus.controller;
 
 import org.ju.cse.cseju.syllabus.model.Course;
+import org.ju.cse.cseju.syllabus.model.content.Content;
 import org.ju.cse.cseju.syllabus.service.CourseServices;
+import org.ju.cse.cseju.syllabus.service.CourseStructureServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author Kamrul Hasan
@@ -15,8 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(path = "/course")
 public class CourseController {
 
+    private static final String SYLLABUS_VIEW_INPUT = "syllabus/input/";
+
     private CourseServices courseServices = new CourseServices();
 
+    private CourseStructureServices courseStructureServices = new CourseStructureServices();
 
     /**
      * <h3>url: /course/inputForm/preview/{courseType}</h3>
@@ -30,11 +37,14 @@ public class CourseController {
     ) {
 
         ModelAndView modelAndViewCourseInputForm = new ModelAndView(
-                "syllabus/courseInputForm"
+                SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
         Course course = courseServices.getCourseInputForm(courseType);
+        List<Content> contentList = courseStructureServices.getContentListForPreview(courseType);
+
         modelAndViewCourseInputForm.addObject("course", course);
+        modelAndViewCourseInputForm.addObject("contentList", contentList);
 
         return modelAndViewCourseInputForm;
     }
@@ -52,7 +62,7 @@ public class CourseController {
     ) {
 
         ModelAndView modelAndViewCourseInputForm = new ModelAndView(
-                "syllabus/courseInputForm"
+                SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
         Course course = courseServices.getCourseInputForm(databaseName, courseCode);

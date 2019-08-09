@@ -36,7 +36,7 @@ public class Table extends Content implements Serializable {
     /**
      * Getters for xml mapping
      */
-    @XmlAttribute(name = "tableId")
+    @XmlAttribute(name = "contentId")
     public Integer getTableId() {
         return tableId;
     }

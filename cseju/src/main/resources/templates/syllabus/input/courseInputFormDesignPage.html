@@ -2,15 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${'Course Input Form'}"></title>
+    <title th:text="${'Form Design Page'}"></title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!--<script th:src="@{/js/syllabus/designCourseInputForm.js}"></script>-->
+    <script th:src="@{/js/syllabus/designCourseInputForm.js}"></script>
 
 </head>
+
 <body>
 <div class=""
      id="main">
+
+    <div class=""
+         id="optionDiv">
+
+        <!--Shows the preview of this type of Course Input Form
+        url: /course/inputForm/preview/{courseType}-->
+        <a class=""
+           id="previewButton"
+           role="button"
+           th:href="@{'/course/inputForm/preview/' + ${courseStructure.name}}">Preview</a>
+    </div>
 
     <div class=""
          id="statusDiv">
@@ -18,123 +30,7 @@
         <p id="statusText"></p>
     </div>
 
-    <section>
-
-        <div class=""
-             id="courseBasicInfoDiv">
-
-            <table border="1">
-                <tbody>
-                <tr>
-                    <th>Course Code</th>
-                    <td>:</td>
-                    <td th:text="${course.courseCode}"></td>
-                    <th>Credit</th>
-                    <td>:</td>
-                    <td th:text="${course.courseCredit}"></td>
-                </tr>
-                <tr>
-                    <th>Title</th>
-                    <td>:</td>
-                    <td th:text="${course.courseTitle}"></td>
-                    <th>Type</th>
-                    <td>:</td>
-                    <td th:text="${course.courseType}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <form>
-        <section class=""
-                 th:each="content, contentId : ${course.contentList}">
-
-            <div class=""
-                 th:id="'content_' + ${contentId.index}">
-
-                <div class=""
-                     th:if="${content instanceof T(org.ju.cse.cseju.syllabus.model.content.TextArea)}"
-                     th:id="'textAreaDiv_' + ${contentId.index}">
-                    <table class=""
-                           border="1"
-                           width="60"
-                           th:id="'inputTable_' + ${contentId.index}">
-
-                        <thead>
-                        <tr>
-                            <th>
-                                <label th:text="${content.title}"></label>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <textarea class=""
-                                          th:id="'textArea_textBody' + ${contentId.index}"
-                                          th:value="${content.textBody}">
-                                </textarea>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class=""
-                     th:if="${content instanceof T(org.ju.cse.cseju.syllabus.model.content.Table)}"
-                     th:id="'tableDiv_' + ${contentId.index}">
-
-                    <table class=""
-                           border="1"
-                           width="60"
-                           th:id="'inputTable_' + ${contentId.index}">
-
-                        <thead>
-                        <tr>
-                            <th th:colspan="${#lists.size(content.fields)}"
-                                th:text="${content.title}">
-
-                            </th>
-                        </tr>
-                        <tr>
-                            <th th:each="fieldName, fieldNameId : ${content.fields}">
-                                <label th:text="${fieldName}"></label>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="row, rowId : ${content.rows}">
-
-                            <td th:each="cell, cellId : ${row.cells}">
-
-                                <textarea class=""
-                                          th:id="'cell_' + ${rowId.index} + '_' + ${cellId.index}"
-                                          th:value="${cell}">
-
-                                </textarea>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td th:colspan="${#lists.size(content.fields)}">
-
-                                <!--Add new input row
-                                url: /course/{databaseName}/add_input_row/{contentId}-->
-                                <a class=""
-                                   th:id="'addRow_' + ${contentId.index}"
-                                   th:href="@{'/course/' + ${databaseName} + '/add_input_row/' + ${contentId.index}}">Add
-                                    +</a>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </form>
-    <!--<form class=""
+    <form class=""
           id="courseStructureDesignForm">
 
         <input class=""
@@ -147,15 +43,15 @@
                type="hidden"
                th:value="${courseStructure.databaseName}">
 
-        &lt;!&ndash;Each row of this table is a content for this type of course
-        Add a row means add a new content to Course Structure and delete vice versa&ndash;&gt;
+        <!--Each row of this table is a content for this type of course
+        Add a row means add a new content to Course Structure and delete vice versa-->
         <table class=""
                id="courseContentTable"
                border="1">
 
             <thead></thead>
             <tbody>
-            &lt;!&ndash;for each ContentBundle in the ContentBundleList of the CourseStructure(CourseStructure)&ndash;&gt;
+            <!--for each ContentBundle in the ContentBundleList of the CourseStructure(CourseStructure)-->
             <tr th:each="contentBundle, rowId : ${courseStructure.contentBundleList}">
 
                 <td>
@@ -165,7 +61,7 @@
                         <div class=""
                              th:id="'contentSelectorDiv_' + ${rowId.index}">
 
-                            &lt;!&ndash;ContentSelector : 0 for TextArea, 1 for Table&ndash;&gt;
+                            <!--ContentSelector : 0 for TextArea, 1 for Table-->
                             <select class=""
                                     th:id="'contentSelector_' + ${rowId.index}"
                                     th:value="${contentBundle.selected}"
@@ -178,8 +74,8 @@
                             </select>
                         </div>
 
-                        &lt;!&ndash;TextArea Div
-                        Hidden if Table is selected&ndash;&gt;
+                        <!--TextArea Div
+                        Hidden if Table is selected-->
                         <div class=""
                              th:id="'textArea_' + ${rowId.index}"
                              th:style="${contentBundle.selected == 1} ? 'display: none' : 'display: block'">
@@ -199,8 +95,8 @@
                             </div>
                         </div>
 
-                        &lt;!&ndash;Table Div
-                        Hidden if TextArea is selected&ndash;&gt;
+                        <!--Table Div
+                        Hidden if TextArea is selected-->
                         <div class=""
                              th:id="'table_' + ${rowId.index}"
                              th:style="${contentBundle.selected == 0} ? 'display: none' : 'display: block'">
@@ -217,13 +113,13 @@
                             <div class=""
                                  th:id="'table_' + ${rowId.index} + '_field2'">
 
-                                &lt;!&ndash;Table to show the FieldNames of a Table(Content)&ndash;&gt;
+                                <!--Table to show the FieldNames of a Table(Content)-->
                                 <table class=""
                                        th:id="'table_' + ${rowId.index} + 'FieldNameTable'">
 
                                     <tbody>
                                     <tr>
-                                        &lt;!&ndash;For each FieldName in the Table.Fields&ndash;&gt;
+                                        <!--For each FieldName in the Table.Fields-->
                                         <td th:each="contentTableFieldName, colId : ${contentBundle.table.fields}">
 
                                             <div class=""
@@ -241,8 +137,8 @@
                                                 <div class=""
                                                      th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteDiv' + ${colId.index}">
 
-                                                    &lt;!&ndash;Delete this Field Form the Table(Content)
-                                                    url: /course_structure/{databaseName}/delete_field_/{contentBundleIndex}/{fieldNameId} &ndash;&gt;
+                                                    <!--Delete this Field Form the Table(Content)
+                                                    url: /course_structure/{databaseName}/delete_field_/{contentBundleIndex}/{fieldNameId} -->
                                                     <a class=""
                                                        th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteButton' + ${colId.index}"
                                                        th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/delete_field_/' + ${rowId.index} + '/' + ${colId.index}}">Delete
@@ -254,8 +150,8 @@
                                             <div class=""
                                                  th:id="'contentTableAddFieldDiv' + ${rowId.index}">
 
-                                                &lt;!&ndash;Add a new Field in the Table(Content)
-                                                url: /course_structure/{databaseName}/add_field_/{contentBundleIndex} &ndash;&gt;
+                                                <!--Add a new Field in the Table(Content)
+                                                url: /course_structure/{databaseName}/add_field_/{contentBundleIndex} -->
                                                 <a class=""
                                                    th:id="'contentTableAddFieldButton' + ${rowId.index}"
                                                    th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/add_field_/' + ${rowId.index}}">Add
@@ -271,8 +167,8 @@
                         <div class=""
                              th:id="'deleteContentRowDiv_' + ${rowId.index}">
 
-                            &lt;!&ndash;Delete this ContentBundle
-                            url: /course_structure/delete_contentBundle/{databaseName}/{contentBundleIndex}&ndash;&gt;
+                            <!--Delete this ContentBundle
+                            url: /course_structure/delete_contentBundle/{databaseName}/{contentBundleIndex}-->
                             <a type="button"
                                th:href="@{'/course_structure/delete_contentBundle/' + ${courseStructure.databaseName} + '/' + ${rowId.index}}">Delete</a>
                         </div>
@@ -286,8 +182,8 @@
                     <div class=""
                          id="addContentRowDiv">
 
-                        &lt;!&ndash;Add a new ContentBundle in the CourseStructure(CourseStructure)
-                        url: /course_structure/add_ContentBundle/{databaseName} &ndash;&gt;
+                        <!--Add a new ContentBundle in the CourseStructure(CourseStructure)
+                        url: /course_structure/add_ContentBundle/{databaseName} -->
                         <a type="button"
                            th:href="@{'/course_structure/add_ContentBundle/' + ${courseStructure.databaseName}}">
                             Add +
@@ -297,7 +193,7 @@
             </tr>
             </tfoot>
         </table>
-    </form>-->
+    </form>
 </div>
 </body>
 </html>

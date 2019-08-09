@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(path = "/course_structure")
 public class CourseStructureController {
 
+    private static final String SYLLABUS_VIEW_INPUT = "syllabus/input/";
+
     private CourseStructureServices courseStructureServices = new CourseStructureServices();
 
     /**
@@ -26,7 +28,7 @@ public class CourseStructureController {
     @GetMapping("/design/{databaseName}")
     public ModelAndView getCourseInputFromDesignPage(@PathVariable("databaseName") String databaseName) {
         ModelAndView modelAndViewDesignCourseInputForm = new ModelAndView(
-                "syllabus/courseInputFormDesignPage"
+                SYLLABUS_VIEW_INPUT + "courseInputFormDesignPage"
         );
 
         CourseStructure courseStructure = courseStructureServices.getCourseStructure(databaseName);

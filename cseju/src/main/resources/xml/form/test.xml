@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <courseStructure>
-    <name></name>
+    <name>test</name>
     <contentBundles>
         <contentBundle>
             <selected>1</selected>
@@ -12,14 +12,14 @@
                 </fields>
                 <rows/>
             </table>
-            <textArea textAreaId="0">
+            <textArea contentId="0">
                 <title>Untitled TextArea</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>
         <contentBundle>
             <selected>0</selected>
-            <table tableId="0">
+            <table contentId="0">
                 <title>Untitled Table</title>
                 <fields>
                     <field>Field0</field>
@@ -32,7 +32,7 @@
         </contentBundle>
         <contentBundle>
             <selected>0</selected>
-            <table tableId="0">
+            <table contentId="0">
                 <title>Untitled Table</title>
                 <fields>
                     <field>Field0</field>
@@ -50,11 +50,10 @@
                 <fields>
                     <field>Field0</field>
                     <field>Field1</field>
-                    <field>Field2</field>
                 </fields>
                 <rows/>
             </table>
-            <textArea textAreaId="0">
+            <textArea contentId="0">
                 <title>Untitled TextArea</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>

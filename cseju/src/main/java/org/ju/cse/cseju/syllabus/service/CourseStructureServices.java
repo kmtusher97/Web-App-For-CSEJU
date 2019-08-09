@@ -1,8 +1,14 @@
 package org.ju.cse.cseju.syllabus.service;
 
 import org.ju.cse.cseju.syllabus.model.CourseStructure;
+import org.ju.cse.cseju.syllabus.model.content.Content;
+import org.ju.cse.cseju.syllabus.model.content.ContentBundle;
+import org.ju.cse.cseju.syllabus.model.content.Table;
 import org.ju.cse.cseju.syllabus.repository.CourseStructureRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kamrul Hasan
@@ -11,6 +17,10 @@ import org.springframework.stereotype.Service;
 public class CourseStructureServices {
 
     private CourseStructureRepository courseStructureRepository = new CourseStructureRepository();
+
+    public void createNewCourseStructure(String syllabusName, String courseTypeName) {
+        courseStructureRepository.create(syllabusName, courseTypeName);
+    }
 
     /**
      * @param databaseName
@@ -73,5 +83,34 @@ public class CourseStructureServices {
         CourseStructure courseStructure = getCourseStructure(databaseName);
         courseStructure.deleteFieldNameFromTableByContentBundleIndex(contentBundleId, fieldNameId);
         saveOrUpdate(databaseName, courseStructure);
+    }
+
+
+    /**
+     * @param databaseName
+     * @return
+     */
+    public List<Content> getContentListForPreview(String databaseName) {
+        List<ContentBundle> contentBundleList = getCourseStructure(databaseName).getContentBundleList();
+        List<Content> contentList = new ArrayList<>();
+
+        for (ContentBundle contentBundle : contentBundleList) {
+            if (contentBundle.getSelected() == 0) {
+                contentList.add(contentBundle.getTextArea());
+            } else if (contentBundle.getSelected() == 1) {
+                Table table = contentBundle.getTable();
+                table.addRow(0);
+                contentList.add(table);
+            }
+        }
+        return contentList;
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     */
+    public void deleteCourseStructure(String syllabusName, String courseType) {
+        courseStructureRepository.deleteDatabase(syllabusName, courseType);
     }
 }

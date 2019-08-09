@@ -30,7 +30,7 @@ public class TextArea extends Content implements Serializable {
         this.textBody = textBody;
     }
 
-    @XmlAttribute(name = "textAreaId")
+    @XmlAttribute(name = "contentId")
     public Integer getTextAreaId() {
         return textAreaId;
     }
