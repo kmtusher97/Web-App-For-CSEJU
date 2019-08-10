@@ -61,7 +61,7 @@ public class CourseController {
             @PathVariable("courseCode") String courseCode
     ) {
 
-        ModelAndView modelAndViewCourseInputForm = new ModelAndView(
+        /*ModelAndView modelAndViewCourseInputForm = new ModelAndView(
                 SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
@@ -69,7 +69,8 @@ public class CourseController {
         modelAndViewCourseInputForm.addObject("course", course);
         modelAndViewCourseInputForm.addObject("databaseName", databaseName);
 
-        return modelAndViewCourseInputForm;
+        return modelAndViewCourseInputForm;*/
+        return null;
     }
 
 

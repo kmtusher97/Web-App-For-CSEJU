@@ -43,6 +43,16 @@
       <version>9.0</version>
     </dependency>
 
+    <!--WebJars-->
+    <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+
+    <!--WebJars-->
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
