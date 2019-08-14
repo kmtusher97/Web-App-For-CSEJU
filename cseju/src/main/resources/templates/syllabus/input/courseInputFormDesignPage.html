@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title th:text="${'Form Design Page'}"></title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
     <script th:src="@{/js/syllabus/designCourseInputForm.js}"></script>
 
 </head>
@@ -21,13 +25,14 @@
         <a class=""
            id="previewButton"
            role="button"
-           th:href="@{'/course/inputForm/preview/' + ${courseStructure.name}}">Preview</a>
+           th:href="@{'/course/inputForm/preview/' + ${courseStructure.databaseName}}">Preview</a>
     </div>
 
     <div class=""
          id="statusDiv">
 
-        <p id="statusText"></p>
+        <span id="statusText1"></span>
+        <span id="statusText2"></span>
     </div>
 
     <form class=""

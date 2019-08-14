@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @XmlRootElement(name = "course")
 @XmlType(propOrder = {
-        "courseTitle", 
+        "courseTitle",
         "courseCredit",
         "courseType",
         "textAreaList",
@@ -49,12 +49,6 @@ public class Course {
     public List<Table> getTableList() {
         return tableList;
     }
-
-/*@XmlElementWrapper(name = "contents")
-    @XmlMixed
-    public List<Content> getContentList() {
-        return contentList;
-    }*/
 
     /**
      * Initiates a Course Object from a type
@@ -88,5 +82,29 @@ public class Course {
         this.setCourseCode("CODE 100");
         this.setCourseCredit(3.0);
         this.setCourseType(courseType);
+    }
+
+    /**
+     * parses the integer from courseCode
+     *
+     * @return
+     */
+    public Integer getCourseCodeNumber() {
+        if (this.courseCode == null) {
+            this.courseCode = "";
+        }
+        Integer codeNumber = 0;
+        Integer powerOf10 = 1;
+
+        for (int i = this.courseCode.length() - 1; i >= 0; i--) {
+            if (this.courseCode.charAt(i) >= '0' &&
+                    this.courseCode.charAt(i) <= '9') {
+                codeNumber += (
+                        (this.courseCode.charAt(i) - '0') * powerOf10
+                );
+                powerOf10 *= 10;
+            }
+        }
+        return codeNumber;
     }
 }

@@ -95,13 +95,11 @@ public class CourseStructure {
 
         List<ContentBundle> contentBundles = new ArrayList<>();
         for (ContentBundle contentBundle : this.contentBundleList) {
-            System.out.println(contentBundle);
             if (contentBundle.getSelected() == 0) {
                 contentBundle.setTable((new Table()).getInitialTable(0));
             } else if (contentBundle.getSelected() == 1) {
                 contentBundle.setTextArea((new TextArea()).getInitialTextArea(0));
             }
-            System.err.println(contentBundle);
             contentBundles.add(contentBundle);
         }
         this.contentBundleList = contentBundles;

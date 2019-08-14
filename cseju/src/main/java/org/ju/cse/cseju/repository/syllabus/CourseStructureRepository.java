@@ -37,7 +37,10 @@ public class CourseStructureRepository {
      * @param courseType
      */
     public void create(String syllabusName, String courseType) {
-        String databaseName = getDatabaseNameByCourseType(syllabusName, courseType);
+        String databaseName = getDatabaseNameByCourseType(
+                syllabusName,
+                courseType
+        );
         CourseStructure courseStructure = new CourseStructure(
                 courseType,
                 databaseName,
@@ -45,7 +48,9 @@ public class CourseStructureRepository {
         );
 
         try {
-            File database = new File(STORAGE_LOCATION + databaseName + EXTENSION);
+            File database = new File(
+                    STORAGE_LOCATION + databaseName + EXTENSION
+            );
             if (!database.exists()) {
                 database.createNewFile();
             }
@@ -61,7 +66,9 @@ public class CourseStructureRepository {
      * @param databaseName
      */
     public void createInitialXmlDatabase(String databaseName) {
-        File file = new File(STORAGE_LOCATION + databaseName + EXTENSION);
+        File file = new File(
+                STORAGE_LOCATION + databaseName + EXTENSION
+        );
         try {
             file.createNewFile();
 
@@ -86,13 +93,21 @@ public class CourseStructureRepository {
      * @param dataBaseName
      * @param courseStructure
      */
-    public void saveOrUpdate(String dataBaseName, CourseStructure courseStructure) {
+    public void saveOrUpdate(String dataBaseName,
+                             CourseStructure courseStructure) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(CourseStructure.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(
+                    CourseStructure.class
+            );
             Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.setProperty(
+                    Marshaller.JAXB_FORMATTED_OUTPUT,
+                    true
+            );
 
-            File storageFile = new File(STORAGE_LOCATION + dataBaseName + EXTENSION);
+            File storageFile = new File(
+                    STORAGE_LOCATION + dataBaseName + EXTENSION
+            );
 
             if (!storageFile.exists()) {
                 createInitialXmlDatabase(dataBaseName);
@@ -107,16 +122,58 @@ public class CourseStructureRepository {
     }
 
     /**
-     * @param dataBaseName
+     * @param syllabusName
+     * @param courseType
      * @return object of CourseStructure class from the xml DB
      */
-    public CourseStructure getCourseStructure(String dataBaseName) {
+    public CourseStructure getCourseStructureBySyllabusNameAndCourseType(
+            String syllabusName,
+            String courseType
+    ) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(CourseStructure.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(
+                    CourseStructure.class
+            );
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
             try {
-                File storageFile = new File(STORAGE_LOCATION + dataBaseName + EXTENSION);
+                String dataBaseName = getDatabaseNameByCourseType(
+                        syllabusName,
+                        courseType
+                );
+                File storageFile = new File(
+                        STORAGE_LOCATION + dataBaseName + EXTENSION
+                );
+                if (!storageFile.exists()) {
+                    throw new FileNotFoundException("Database Not Exits!");
+                }
+
+                return (CourseStructure) unmarshaller.unmarshal(storageFile);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * @param dataBaseName
+     * @return
+     */
+    public CourseStructure getCourseStructure(String dataBaseName) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(
+                    CourseStructure.class
+            );
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+            try {
+                File storageFile = new File(
+                        STORAGE_LOCATION + dataBaseName + EXTENSION
+                );
                 if (!storageFile.exists()) {
                     throw new FileNotFoundException("Database Not Exits!");
                 }

@@ -64,4 +64,13 @@ public class CourseTypeRepository {
         }
         return null;
     }
+
+    /**
+     * @param syllabusName
+     */
+    public void create(String syllabusName) {
+        CourseTypes courseTypes = new CourseTypes();
+        courseTypes.setSyllabusName(syllabusName);
+        saveOrUpdate(syllabusName, courseTypes);
+    }
 }

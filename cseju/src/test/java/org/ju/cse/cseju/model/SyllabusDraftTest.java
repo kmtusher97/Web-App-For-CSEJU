@@ -1,6 +1,6 @@
 package org.ju.cse.cseju.model;
 
-import org.ju.cse.cseju.model.syllabus.Syllabus;
+import org.ju.cse.cseju.model.syllabus.SyllabusDraft;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,21 +11,21 @@ import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.TreeSet;
 
-public class SyllabusTest {
+public class SyllabusDraftTest {
 
-    private Syllabus syllabus;
+    private SyllabusDraft syllabusDraft;
 
     @Before
     public void setUp() throws Exception {
-        syllabus = new Syllabus();
-        syllabus.setSyllabusId(1);
-        syllabus.setName("sylU2018-22");
-        syllabus.setType("U");
-        syllabus.setEffectiveYearFrom("2018");
-        syllabus.setEffectiveYearTo("2022");
-        syllabus.setVersion("1.0");
-        syllabus.setSession();
-        syllabus.setYearList(new TreeSet<>());
+        syllabusDraft = new SyllabusDraft();
+        syllabusDraft.setSyllabusId(1);
+        syllabusDraft.setName("sylU2018-22");
+        syllabusDraft.setType("U");
+        syllabusDraft.setEffectiveYearFrom("2018");
+        syllabusDraft.setEffectiveYearTo("2022");
+        syllabusDraft.setVersion("1.0");
+        syllabusDraft.setSession();
+        syllabusDraft.setYearList(new TreeSet<>());
 
         File file = new File("src/main/resources/xml/draft/test.xml");
         file.createNewFile();
@@ -40,11 +40,11 @@ public class SyllabusTest {
     @Test
     public void testXmlBinding() {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Syllabus.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SyllabusDraft.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(syllabus, new File("src/main/resources/xml/draft/test.xml"));
-            marshaller.marshal(syllabus, System.out);
+            marshaller.marshal(syllabusDraft, new File("src/main/resources/xml/draft/test.xml"));
+            marshaller.marshal(syllabusDraft, System.out);
         } catch (JAXBException e) {
             e.printStackTrace();
         }

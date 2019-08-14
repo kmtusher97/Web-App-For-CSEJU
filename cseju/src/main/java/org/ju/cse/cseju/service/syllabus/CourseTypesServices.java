@@ -24,7 +24,7 @@ public class CourseTypesServices {
      */
     public CourseTypes getCourseTypes(String syllabusName) {
         return courseTypeRepository.getCourseTypes(
-                syllabusName /**databaseName = Syllabus Name**/
+                syllabusName /**databaseName = SyllabusDraftController Name**/
         );
     }
 
@@ -34,7 +34,7 @@ public class CourseTypesServices {
      */
     public void addCourseType(String databaseName, String courseType) {
         CourseTypes courseTypes = courseTypeRepository.getCourseTypes(
-                databaseName /**databaseName = Syllabus Name**/
+                databaseName /**databaseName = SyllabusDraftController Name**/
         );
 
         List<String> typeList = courseTypes.getCourseTypeList();
@@ -54,7 +54,7 @@ public class CourseTypesServices {
      */
     public void deleteCourseType(String syllabusName, String courseType) {
         CourseTypes courseTypes = courseTypeRepository.getCourseTypes(
-                syllabusName /**databaseName = Syllabus Name**/
+                syllabusName /**databaseName = SyllabusDraftController Name**/
         );
 
         List<String> typeList = courseTypes.getCourseTypeList();
@@ -72,5 +72,12 @@ public class CourseTypesServices {
                 syllabusName, /**databaseName = syllabusName**/
                 courseTypes
         );
+    }
+
+    /**
+     * @param syllabusName
+     */
+    public void createSyllabusCourseTypes(String syllabusName) {
+        courseTypeRepository.create(syllabusName);
     }
 }

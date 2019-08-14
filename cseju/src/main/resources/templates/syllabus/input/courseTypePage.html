@@ -26,11 +26,11 @@
             </td>
             <td>
                 <!--Edit the type
-                url: /courseType/{syllabusName}/deleteType/{courseTypeName}-->
+                url: /course_structure/design/{databaseName}-->
                 <a class=""
                    th:id="'courseTypeEdit' + ${courseTypeId.index}"
                    role="button"
-                   th:href="@{'/'}"
+                   th:href="@{'/course_structure/design/' + ${courseTypes.syllabusName} + '_' + ${courseType}}"
                    th:text="${courseType}">
                 </a>
             </td>

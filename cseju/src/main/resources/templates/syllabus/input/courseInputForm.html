@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title th:text="${'Course Input Form'}"></title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!--<script th:src="@{/js/syllabus/designCourseInputForm.js}"></script>-->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
 </head>
 <body>
@@ -55,7 +57,7 @@
                      th:id="'content_' + ${contentId.index}">
 
                     <div class=""
-                         th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.TextArea)}"
+                         th:if="${content instanceof T(org.ju.cse.cseju.model.syllabusDraft.content.TextArea)}"
                          th:id="'textAreaDiv_' + ${contentId.index}">
                         <table class=""
                                border="1"
@@ -83,7 +85,7 @@
                     </div>
 
                     <div class=""
-                         th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.Table)}"
+                         th:if="${content instanceof T(org.ju.cse.cseju.model.syllabusDraft.content.Table)}"
                          th:id="'tableDiv_' + ${contentId.index}">
 
                         <table class=""

@@ -20,7 +20,7 @@ import java.util.TreeSet;
 @Getter
 @AllArgsConstructor
 @XmlRootElement(name = "syllabus")
-public class Syllabus {
+public class SyllabusDraft {
     private Integer syllabusId;
     private String type;
     private String effectiveYearFrom;
@@ -30,7 +30,7 @@ public class Syllabus {
     private String session;
     private SortedSet<Year> yearList;
 
-    public Syllabus() {
+    public SyllabusDraft() {
         this.yearList = new TreeSet<>(
                 Comparator.comparing(Year::getYearId)
         );
@@ -70,8 +70,59 @@ public class Syllabus {
      */
     public void setName() {
         this.setSession();
-        this.name = "syllabus" +
+        this.name = "syllabus_" +
                 this.type +
                 this.session;
+    }
+
+    /**
+     * to handle null pointer exception for null this.yearList
+     */
+    public void handleNullPointerExceptionOfYearList() {
+        if (this.yearList == null) {
+            this.yearList = new TreeSet<>(
+                    Comparator.comparing(Year::getYearId)
+            );
+        }
+    }
+
+    /**
+     * @return mex
+     */
+    public Integer getMex() {
+        handleNullPointerExceptionOfYearList();
+        Integer mex = 1;
+        for (Year year : this.yearList) {
+            if (year.getYearId() == mex) {
+                mex++;
+            } else if (year.getYearId() > mex) {
+                return mex;
+            }
+        }
+        return mex;
+    }
+
+    /**
+     * @param year
+     */
+    public void addYear(Year year) {
+        handleNullPointerExceptionOfYearList();
+        this.yearList.add(year);
+    }
+
+    /**
+     * delete a year by yearId
+     *
+     * @param yearId
+     */
+    public void deleteYear(Integer yearId) {
+        handleNullPointerExceptionOfYearList();
+        for (Year year : this.yearList) {
+            if (year.getYearId() != yearId) {
+                continue;
+            }
+            this.yearList.remove(year);
+            break;
+        }
     }
 }

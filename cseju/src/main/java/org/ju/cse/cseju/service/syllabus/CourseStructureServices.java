@@ -109,8 +109,47 @@ public class CourseStructureServices {
     /**
      * @param syllabusName
      * @param courseType
+     * @return List<Content>
+     */
+    public List<Content> getContentList(String syllabusName, String courseType) {
+        List<ContentBundle> contentBundleList = courseStructureRepository
+                .getCourseStructureBySyllabusNameAndCourseType(
+                        syllabusName,
+                        courseType
+                ).getContentBundleList();
+
+        List<Content> contentList = new ArrayList<>();
+
+        for (ContentBundle contentBundle : contentBundleList) {
+            if (contentBundle.getSelected() == 0) {
+                contentList.add(contentBundle.getTextArea());
+            } else if (contentBundle.getSelected() == 1) {
+                Table table = contentBundle.getTable();
+                table.addRow(0);
+                contentList.add(table);
+            }
+        }
+        return contentList;
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
      */
     public void deleteCourseStructure(String syllabusName, String courseType) {
         courseStructureRepository.deleteDatabase(syllabusName, courseType);
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     * @return List<ContentBundle>
+     */
+    public List<ContentBundle> getContentBundleList(String syllabusName, String courseType) {
+        return courseStructureRepository
+                .getCourseStructureBySyllabusNameAndCourseType(
+                        syllabusName,
+                        courseType
+                ).getContentBundleList();
     }
 }

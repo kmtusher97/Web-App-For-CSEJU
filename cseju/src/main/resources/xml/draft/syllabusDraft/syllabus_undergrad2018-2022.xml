@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<syllabus session="2018-2022" id="1" type="undergrad">
+  <effectiveYearFrom>2018</effectiveYearFrom>
+  <effectiveYearTo>2022</effectiveYearTo>
+  <name>syllabus_undergrad2018-2022</name>
+  <years>
+    <year yearId="1">
+      <semesters>
+        <semester semesterId="1">
+          <courses>
+            <course courseCode="CSE 100">
+              <courseTitle>Viva Voce</courseTitle>
+              <courseType>Viva Voce</courseType>
+            </course>
+            <course courseCode="CSE 106">
+              <courseTitle>Electronic Circuit</courseTitle>
+              <courseType>Theory</courseType>
+              <content contentId="2">
+                <title>Untitled TextArea</title>
+                <textBody>Empty Text Body</textBody>
+              </content>
+              <content contentId="3">
+                <title>Untitled TextArea</title>
+                <textBody>Empty Text Body</textBody>
+              </content>
+              <content contentId="1">
+                <title>Untitled Table</title>
+                <fields>
+                  <field>Field0</field>
+                  <field>Field2</field>
+                </fields>
+                <rows>
+                  <row tableRowId="0">
+                    <cells>
+                      <cell>cell0</cell>
+                      <cell>cell1</cell>
+                    </cells>
+                  </row>
+                </rows>
+              </content>
+            </course>
+          </courses>
+        </semester>
+      </semesters>
+    </year>
+  </years>
+</syllabus>

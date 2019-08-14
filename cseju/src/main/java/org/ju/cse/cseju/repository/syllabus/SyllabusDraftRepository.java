@@ -1,6 +1,6 @@
 package org.ju.cse.cseju.repository.syllabus;
 
-import org.ju.cse.cseju.model.syllabus.Syllabus;
+import org.ju.cse.cseju.model.syllabus.SyllabusDraft;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,28 +13,28 @@ import java.io.IOException;
 /**
  * @author Kamrul Hasan
  */
-public class SyllabusRepository {
+public class SyllabusDraftRepository {
 
     private final static String EXTENSION = ".xml";
     private final static String STORAGE_LOCATION = "src/main/resources/xml/draft/syllabusDraft/";
 
     /**
-     * @param syllabus
+     * @param syllabusDraft
      */
-    public void saveOrUpdate(Syllabus syllabus) {
+    public void saveOrUpdate(SyllabusDraft syllabusDraft) {
         try {
             File database = new File(
-                    STORAGE_LOCATION + syllabus.getName() + EXTENSION
+                    STORAGE_LOCATION + syllabusDraft.getName() + EXTENSION
             );
             if (!database.exists()) {
                 database.createNewFile();
             }
 
-            JAXBContext jaxbContext = JAXBContext.newInstance(Syllabus.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SyllabusDraft.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(syllabus, database);
-            marshaller.marshal(syllabus, System.out);
+            marshaller.marshal(syllabusDraft, database);
+            marshaller.marshal(syllabusDraft, System.out);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class SyllabusRepository {
      * @param databaseName
      * @return
      */
-    public Syllabus getSyllabus(String databaseName) {
+    public SyllabusDraft getSyllabus(String databaseName) {
         try {
             File database = new File(
                     STORAGE_LOCATION + databaseName + EXTENSION
@@ -56,10 +56,10 @@ public class SyllabusRepository {
                 throw new FileNotFoundException("Database doesn't exists!!!");
             }
 
-            JAXBContext jaxbContext = JAXBContext.newInstance(Syllabus.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SyllabusDraft.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            return (Syllabus) unmarshaller.unmarshal(database);
+            return (SyllabusDraft) unmarshaller.unmarshal(database);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

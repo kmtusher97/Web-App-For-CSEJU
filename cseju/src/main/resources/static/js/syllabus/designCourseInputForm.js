@@ -1,6 +1,7 @@
 
 function loadFormData() {
-    var courseContentTableRowCount = document.getElementById("courseContentTable").rows.length;
+    var courseContentTableRowCount =
+            document.getElementById("courseContentTable").rows.length;
 
     var contentBundleList = [];
 
@@ -11,7 +12,9 @@ function loadFormData() {
         };
 
         var fields = [];
-        var countOfFieldNamesOfTable = document.getElementById('table_'.concat(i, 'FieldNameTable')).rows[0].cells.length;
+        var countOfFieldNamesOfTable = document.getElementById(
+                'table_'.concat(i, 'FieldNameTable')
+        ).rows[0].cells.length;
 
         for(var j = 0; j < countOfFieldNamesOfTable; j++) {
             var tableContentFieldName = $('#contentTable'.concat(i, 'FieldName', j)).val();
@@ -44,18 +47,18 @@ function loadFormData() {
 
 
 function changeContentType(id) {
-    var textArea = document.getElementById('textArea_'.concat(id));
-    var table = document.getElementById('table_'.concat(id));
+    var textArea = $("#textArea_".concat(id));
+    var table = $("#table_".concat(id));
 
-    var selectedContentType = document.getElementById('contentSelector_'.concat(id)).value;
+    var selectedContentType = $("#contentSelector_".concat(id)).val();
 
     if (selectedContentType == 1) {         // table selected
-        textArea.style.display = "none";
-        table.style.display = "block";
+        textArea.hide();
+        table.show();
     }
     else if (selectedContentType == 0) {  // textArea selected
-        table.style.display = "none";
-        textArea.style.display = "block";
+        table.hide();
+        textArea.show();
     }
 }
 
@@ -76,7 +79,22 @@ $(document).ready(function() {
             dataType : 'json',
             success : function(result) {
                 if (result.status == "saved") {
-                    $("#statusText").html("saved...");
+                    $("#statusText1")
+                            .text("saving changes....")
+                            .show()
+                            .fadeOut(1000)
+                            .css({
+                                "color" : "blue"
+                            });
+
+                    $("#statusText2")
+                            .delay(2500)
+                            .text("saved!!!")
+                            .show()
+                            .fadeOut(2500)
+                            .css({
+                                "color" : "green"
+                            });
                 } else {
                     alert("Not saved");
                 }

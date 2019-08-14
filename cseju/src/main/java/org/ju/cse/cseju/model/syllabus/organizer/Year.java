@@ -38,14 +38,33 @@ public class Year {
 
 
     /**
-     * @return
+     * to handle null pointer exception for null this.semesterList
      */
-    public Integer getMex() {
+    public void handleNullPointerExceptionOfSemesterList() {
         if (this.semesterList == null) {
             this.semesterList = new TreeSet<>(
                     Comparator.comparing(Semester::getSemesterId)
             );
         }
+    }
+
+    /**
+     * @return Integer numberOfCourses
+     */
+    public Integer getNumberOfCoursesForRowSpan() {
+        handleNullPointerExceptionOfSemesterList();
+        Integer numberOfCourses = 0;
+        for (Semester semester : this.semesterList) {
+            numberOfCourses += Math.max(1, semester.getCourseList().size());
+        }
+        return numberOfCourses;
+    }
+
+    /**
+     * @return MEX
+     */
+    public Integer getMex() {
+        handleNullPointerExceptionOfSemesterList();
         Integer mex = 1;
         for (Semester semester : this.semesterList) {
             if (semester.getSemesterId() == mex) {
@@ -55,5 +74,43 @@ public class Year {
             }
         }
         return mex;
+    }
+
+    /**
+     * @return String st, nd, rd, th
+     */
+    public String getYearNameExtension() {
+        if (this.yearId % 10 == 1) {
+            return "st";
+        } else if (this.yearId % 10 == 2) {
+            return "nd";
+        } else if (this.yearId % 10 == 3) {
+            return "rd";
+        }
+        return "th";
+    }
+
+    /**
+     * add new Semester
+     */
+    public void addSemester() {
+        handleNullPointerExceptionOfSemesterList();
+        Semester semester = new Semester();
+        semester.setSemesterId(this.getMex());
+        this.semesterList.add(semester);
+    }
+
+    /**
+     * deletes a Semester by semesterId
+     *
+     * @param semesterId
+     */
+    public void deleteSemester(Integer semesterId) {
+        handleNullPointerExceptionOfSemesterList();
+        for (Semester semester : this.semesterList) {
+            if (semester.getSemesterId() != semesterId) continue;
+            this.semesterList.remove(semester);
+            break;
+        }
     }
 }

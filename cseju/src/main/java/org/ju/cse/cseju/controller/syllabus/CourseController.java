@@ -28,20 +28,20 @@ public class CourseController {
     /**
      * <h3>url: /course/inputForm/preview/{courseType}</h3>
      *
-     * @param courseType
+     * @param databaseName
      * @return ModelAndView
      */
-    @GetMapping("/inputForm/preview/{courseType}")
+    @GetMapping("/inputForm/preview/{databaseName}")
     public ModelAndView getCourseInputFormPreview(
-            @PathVariable("courseType") String courseType
+            @PathVariable("databaseName") String databaseName
     ) {
 
         ModelAndView modelAndViewCourseInputForm = new ModelAndView(
                 SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
-        Course course = courseServices.getCourseInputForm(courseType);
-        List<Content> contentList = courseStructureServices.getContentListForPreview(courseType);
+        Course course = courseServices.getCourseInputForm(databaseName);
+        List<Content> contentList = courseStructureServices.getContentListForPreview(databaseName);
 
         modelAndViewCourseInputForm.addObject("course", course);
         modelAndViewCourseInputForm.addObject("contentList", contentList);
