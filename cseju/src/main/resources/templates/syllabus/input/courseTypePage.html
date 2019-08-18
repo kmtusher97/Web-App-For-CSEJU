@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Course Types'}"></title>
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/js/syllabus/courseTypePage.js}"></script>
+</head>
+<body>
+<div class=""
+     id="courseTypesListDiv">
+
+    <table class=""
+           id="courseTypesTable"
+           border="1">
+        <thead>
+        <tr>
+            <th colspan="3">Course Types</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="courseType, courseTypeId : ${courseTypes.courseTypeList}">
+            <td th:text="${courseTypeId.index} + 1">
+
+            </td>
+            <td>
+                <!--Edit the type
+                url: /course_structure/design/{databaseName}-->
+                <a class=""
+                   th:id="'courseTypeEdit' + ${courseTypeId.index}"
+                   role="button"
+                   th:href="@{'/course_structure/design/' + ${courseTypes.syllabusName} + '_' + ${courseType}}"
+                   th:text="${courseType}">
+                </a>
+            </td>
+            <td>
+                <!--Delete the type
+                url: /courseType/{syllabusName}/deleteType/{courseTypeName}-->
+                <a class=""
+                   th:id="'courseTypeDelete' + ${courseTypeId.index}"
+                   th:href="@{'/courseType/' + ${courseTypes.syllabusName} + '/deleteType/' + ${courseType}}"
+                   role="button">Delete</a>
+            </td>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">
+                <button class=""
+                        id="addCourseType">Add +
+                </button>
+            </td>
+        </tr>
+        <tr id="addTypeFormDivRow"
+            style="display:none">
+
+            <td colspan="3">
+                <div class=""
+                     th:id="addTypeFormDiv">
+
+                    <form class=""
+                          id="addCourseTypeForm"
+                          method="post"
+                          th:action="@{'/courseType/' + ${courseTypes.syllabusName} + '/saveNewType'}">
+
+                        <div>
+                            <input class=""
+                                   id="newCourseTypeInput"
+                                   type="text"
+                                   th:field="${newCourseType.text}" required>
+                        </div>
+                        <span id="inputErrorMessage"></span>
+
+                        <div>
+                            <button class=""
+                                    type="submit" >Create Type</button>
+                        </div>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+</body>
+</html>
