@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <courseStructure>
-    <name>test</name>
+    <name>Thesis</name>
     <contentBundles>
-        <contentBundle>
-            <selected>1</selected>
-            <table>
-                <title>Contents</title>
-                <fields>
-                    <field>Title</field>
-                    <field>Description</field>
-                </fields>
-                <rows/>
-            </table>
-            <textArea contentId="0">
-                <title>Untitled TextArea</title>
-                <textBody>Empty Text Body</textBody>
-            </textArea>
-        </contentBundle>
         <contentBundle>
             <selected>0</selected>
             <table contentId="0">
@@ -39,17 +24,17 @@
                 </fields>
             </table>
             <textArea>
-                <title>Learnig Outcome </title>
+                <title>Thesis Topic</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>
         <contentBundle>
             <selected>1</selected>
             <table>
-                <title>Untitled Table</title>
+                <title>Thesis Requirements</title>
                 <fields>
-                    <field>Field0</field>
-                    <field>Field1</field>
+                    <field>SL</field>
+                    <field>Description</field>
                 </fields>
                 <rows/>
             </table>
@@ -59,5 +44,5 @@
             </textArea>
         </contentBundle>
     </contentBundles>
-    <databaseName>test</databaseName>
+    <databaseName>syllabus_undergrad2018-2022_Thesis</databaseName>
 </courseStructure>
