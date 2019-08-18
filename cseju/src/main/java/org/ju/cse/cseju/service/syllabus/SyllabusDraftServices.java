@@ -63,7 +63,9 @@ public class SyllabusDraftServices {
      */
     public void deleteYear(String syllabusName, Integer yearId) {
         SyllabusDraft syllabusDraft = getSyllabusDraft(syllabusName);
-        syllabusDraft.deleteYear(yearId);
+
+        syllabusDraft.deleteYearByYearId(yearId);
+
         saveOrUpdate(syllabusDraft);
     }
 
@@ -73,17 +75,14 @@ public class SyllabusDraftServices {
      * @param syllabusName
      * @param yearId
      */
-    public void addSemesterIntoYear(String syllabusName, Integer yearId) {
+    public void addSemesterIntoYear(String syllabusName,
+                                    Integer yearId) {
         SyllabusDraft syllabusDraft = getSyllabusDraft(syllabusName);
-        SortedSet<Year> years = syllabusDraft.getYearList();
 
-        for (Year year : years) {
-            if (year.getYearId() != yearId) continue;
-            year.addSemester();
-            break;
-        }
+        Year yearUpdated = syllabusDraft.getYearByYearId(yearId);
+        yearUpdated.addSemester();
+        syllabusDraft.setYearByYearId(yearId, yearUpdated);
 
-        syllabusDraft.setYearList(years);
         saveOrUpdate(syllabusDraft);
     }
 
@@ -97,18 +96,16 @@ public class SyllabusDraftServices {
      */
     public void deleteSemesterFromYear(String syllabusName,
                                        Integer yearId,
-                                       Integer semesterId
-    ) {
+                                       Integer semesterId) {
         SyllabusDraft syllabusDraft = getSyllabusDraft(syllabusName);
-        SortedSet<Year> years = syllabusDraft.getYearList();
 
-        for (Year year : years) {
-            if (year.getYearId() != yearId) continue;
-            year.deleteSemester(semesterId);
-            break;
-        }
+        Year yearUpdated = syllabusDraft.getYearByYearId(yearId);
+        yearUpdated.deleteSemesterBySemesterId(semesterId);
+        syllabusDraft.setYearByYearId(
+                yearId,
+                yearUpdated
+        );
 
-        syllabusDraft.setYearList(years);
         saveOrUpdate(syllabusDraft);
     }
 
@@ -122,32 +119,27 @@ public class SyllabusDraftServices {
                                       Integer yearId,
                                       Integer semesterId,
                                       Course course) {
+        /**set semesterId an courseId**/
+        course.setYearId(yearId);
+        course.setSemesterId(semesterId);
 
         SyllabusDraft syllabusDraft = getSyllabusDraft(syllabusName);
-        SortedSet<Year> years = syllabusDraft.getYearList();
 
-        Year yearUpdate = null;
+        Year yearUpdated = syllabusDraft.getYearByYearId(yearId);
+        Semester semesterUpdated = yearUpdated.getSemesterBySemesterId(semesterId);
+        semesterUpdated.setCourseByCourseCode(
+                course.getCourseCode(),
+                course
+        );
+        yearUpdated.setSemesterBySemesterId(
+                semesterId,
+                semesterUpdated
+        );
+        syllabusDraft.setYearByYearId(
+                yearId,
+                yearUpdated
+        );
 
-        for (Year year : years) {
-            if (year.getYearId() != yearId) continue;
-            yearUpdate = year;
-            break;
-        }
-        if (yearUpdate != null) {
-            years.remove(yearUpdate);
-
-            SortedSet<Semester> semesters = yearUpdate.getSemesterList();
-            for (Semester semester : semesters) {
-                if (semester.getSemesterId() != semesterId) continue;
-                semester.addCourse(course);
-                break;
-            }
-
-            yearUpdate.setSemesterList(semesters);
-            years.add(yearUpdate);
-        }
-
-        syllabusDraft.setYearList(years);
         saveOrUpdate(syllabusDraft);
     }
 
@@ -165,30 +157,19 @@ public class SyllabusDraftServices {
                                          Integer semesterId,
                                          String courseCode) {
         SyllabusDraft syllabusDraft = getSyllabusDraft(syllabusName);
-        SortedSet<Year> years = syllabusDraft.getYearList();
 
-        Year yearUpdate = null;
+        Year yearUpdated = syllabusDraft.getYearByYearId(yearId);
+        Semester semesterUpdated = yearUpdated.getSemesterBySemesterId(semesterId);
+        semesterUpdated.deleteCourseByCourseCode(courseCode);
+        yearUpdated.setSemesterBySemesterId(
+                semesterId,
+                semesterUpdated
+        );
+        syllabusDraft.setYearByYearId(
+                yearId,
+                yearUpdated
+        );
 
-        for (Year year : years) {
-            if (year.getYearId() != yearId) continue;
-            yearUpdate = year;
-            break;
-        }
-        if (yearUpdate != null) {
-            years.remove(yearUpdate);
-
-            SortedSet<Semester> semesters = yearUpdate.getSemesterList();
-            for (Semester semester : semesters) {
-                if (semester.getSemesterId() != semesterId) continue;
-                semester.deleteCourse(courseCode);
-                break;
-            }
-
-            yearUpdate.setSemesterList(semesters);
-            years.add(yearUpdate);
-        }
-
-        syllabusDraft.setYearList(years);
         saveOrUpdate(syllabusDraft);
     }
 }

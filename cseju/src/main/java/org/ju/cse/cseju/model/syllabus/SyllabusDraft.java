@@ -115,8 +115,9 @@ public class SyllabusDraft {
      *
      * @param yearId
      */
-    public void deleteYear(Integer yearId) {
+    public void deleteYearByYearId(Integer yearId) {
         handleNullPointerExceptionOfYearList();
+
         for (Year year : this.yearList) {
             if (year.getYearId() != yearId) {
                 continue;
@@ -124,5 +125,31 @@ public class SyllabusDraft {
             this.yearList.remove(year);
             break;
         }
+    }
+
+    /**
+     * @param yearId
+     * @return Year
+     */
+    public Year getYearByYearId(Integer yearId) {
+        handleNullPointerExceptionOfYearList();
+
+        Year yearResult = null;
+        for (Year year : this.yearList) {
+            if (year.getYearId() == yearId) {
+                yearResult = year;
+                break;
+            }
+        }
+        return yearResult;
+    }
+
+    /**
+     * @param yearId
+     * @param year
+     */
+    public void setYearByYearId(Integer yearId, Year year) {
+        deleteYearByYearId(yearId);
+        addYear(year);
     }
 }

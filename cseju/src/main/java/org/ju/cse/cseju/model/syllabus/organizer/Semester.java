@@ -82,12 +82,39 @@ public class Semester {
      *
      * @param courseCode
      */
-    public void deleteCourse(String courseCode) {
+    public void deleteCourseByCourseCode(String courseCode) {
         handleNullPointerExceptionOfCourseList();
         for (Course course : this.courseList) {
             if (!course.getCourseCode().equals(courseCode)) continue;
             this.courseList.remove(course);
             break;
         }
+    }
+
+    /**
+     * @param courseCode
+     * @return Course By CourseCode
+     */
+    public Course getCourseByCourseCode(String courseCode) {
+        handleNullPointerExceptionOfCourseList();
+
+        Course courseResult = null;
+        for (Course course : this.courseList) {
+            if (course.getCourseCode().equals(courseCode)) {
+                courseResult = course;
+                break;
+            }
+        }
+        return courseResult;
+    }
+
+    /**
+     * @param courseCode
+     * @param courseToSet
+     */
+    public void setCourseByCourseCode(String courseCode,
+                                      Course courseToSet) {
+        deleteCourseByCourseCode(courseCode);
+        addCourse(courseToSet);
     }
 }

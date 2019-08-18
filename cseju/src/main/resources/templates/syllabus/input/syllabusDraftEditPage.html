@@ -99,11 +99,28 @@
                         <p th:text="${year.semesterList[0].courseList[0].courseTitle}"></p>
                     </div>
                 </td>-->
-                <td th:if="${semesterCount > 0 && year.semesterList[0].courseList.size() > 0}"
-                    th:text="${year.semesterList[0].courseList[0].courseCode}"></td>
 
-                <td th:if="${semesterCount > 0 && year.semesterList[0].courseList.size() > 0}"
-                    th:text="${year.semesterList[0].courseList[0].courseTitle}"></td>
+                <!--Course Info Cells-->
+                <td th:if="${semesterCount > 0 && year.semesterList[0].courseList.size() > 0}">
+                    <div>
+                        <h6 th:text="${year.semesterList[0].courseList[0].courseCode}"></h6>
+                    </div>
+                </td>
+
+                <td th:if="${semesterCount > 0 && year.semesterList[0].courseList.size() > 0}">
+                    <div>
+                        <!--Course Input Form
+                        url: /course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}-->
+                        <a class=""
+                           th:href="@{'/course/inputForm/' + ${syllabus.name} + '/' + ${year.yearId} + '/' +
+                                        ${year.semesterList[0].semesterId} + '/' +
+                                            ${year.semesterList[0].courseList[0].courseCode}}"
+                           role="button">
+
+                            <h6 th:text="${year.semesterList[0].courseList[0].courseTitle}"></h6>
+                        </a>
+                    </div>
+                </td>
 
                 <td th:if="${semesterCount > 0 && year.semesterList[0].courseList.size() > 0}">
                     <!--Delete Course
@@ -132,8 +149,25 @@
                         </div>
                     </td>-->
 
-                    <td th:text="${course.courseCode}"></td>
-                    <td th:text="${course.courseTitle}"></td>
+                    <!--Course Info cells-->
+                    <td>
+                        <div>
+                            <h6 th:text="${course.courseCode}"></h6>
+                        </div>
+                    </td>
+                    <td>
+                        <!--Course Input Form
+                        url: /course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}-->
+                        <div>
+                            <a class=""
+                               th:href="@{'/course/inputForm/' + ${syllabus.name} + '/' + ${year.yearId} + '/' +
+                                        ${year.semesterList[0].semesterId} + '/' +
+                                            ${course.courseCode}}"
+                               role="button">
+                                <h6 th:text="${course.courseTitle}"></h6>
+                            </a>
+                        </div>
+                    </td>
 
                     <td>
                         <!--Delete Course
@@ -197,11 +231,27 @@
                         </div>
                     </td>-->
 
-                    <td th:if="${semester.courseList.size()}"
-                        th:text="${semester.courseList[0].courseCode}"></td>
+                    <!--Course Info Cells Start-->
+                    <td th:if="${semester.courseList.size()}">
+                        <div>
+                            <h6 th:text="${semester.courseList[0].courseCode}"></h6>
+                        </div>
+                    </td>
 
-                    <td th:if="${semester.courseList.size()}"
-                        th:text="${semester.courseList[0].courseTitle}"></td>
+                    <td th:if="${semester.courseList.size()}">
+                        <div>
+                            <!--Course Input Form
+                            url: /course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}-->
+                            <a class=""
+                               th:href="@{'/course/inputForm/' + ${syllabus.name} + '/' + ${year.yearId} + '/' +
+                                        ${semester.semesterId} + '/' +
+                                            ${semester.courseList[0].courseCode}}"
+                               role="button">
+                                <h6 th:text="${semester.courseList[0].courseTitle}"></h6>
+                            </a>
+                        </div>
+                    </td>
+                    <!--Course Info Cells End-->
 
                     <td th:if="${semester.courseList.size()}">
                         <!--Delete Course
@@ -230,8 +280,27 @@
                             </div>
                         </td>-->
 
-                        <td th:text="${course.courseCode}"></td>
-                        <td th:text="${course.courseTitle}"></td>
+                        <!--Course Info Cells Start-->
+                        <td>
+                            <div>
+                                <h6 th:text="${course.courseCode}"></h6>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                <!--Course Input Form
+                                url: /course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}-->
+                                <a class=""
+                                   th:href="@{'/course/inputForm/' + ${syllabus.name} + '/' + ${year.yearId} + '/' +
+                                        ${semester.semesterId} + '/' +
+                                            ${course.courseCode}}"
+                                   role="button">
+                                    <h6 th:text="${course.courseTitle}"></h6>
+                                </a>
+                            </div>
+                        </td>
+                        <!--Course Info Cells End-->
 
                         <td>
                             <!--Delete Course

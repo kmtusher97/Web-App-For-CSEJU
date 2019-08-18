@@ -101,11 +101,19 @@ public class Year {
     }
 
     /**
+     * @param semester
+     */
+    private void addSemester(Semester semester) {
+        handleNullPointerExceptionOfSemesterList();
+        this.semesterList.add(semester);
+    }
+
+    /**
      * deletes a Semester by semesterId
      *
      * @param semesterId
      */
-    public void deleteSemester(Integer semesterId) {
+    public void deleteSemesterBySemesterId(Integer semesterId) {
         handleNullPointerExceptionOfSemesterList();
         for (Semester semester : this.semesterList) {
             if (semester.getSemesterId() != semesterId) continue;
@@ -113,4 +121,34 @@ public class Year {
             break;
         }
     }
+
+
+    /**
+     * @param semesterId
+     * @return Semester By SemesterId
+     */
+    public Semester getSemesterBySemesterId(Integer semesterId) {
+        handleNullPointerExceptionOfSemesterList();
+
+        Semester semesterResult = null;
+        for (Semester semester : this.semesterList) {
+            if (semester.getSemesterId() == semesterId) {
+                semesterResult = semester;
+                break;
+            }
+        }
+        return semesterResult;
+    }
+
+    /**
+     * @param semesterId
+     * @param semesterToSet
+     */
+    public void setSemesterBySemesterId(Integer semesterId,
+                                        Semester semesterToSet) {
+        deleteSemesterBySemesterId(semesterId);
+        addSemester(semesterToSet);
+    }
+
+
 }

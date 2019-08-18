@@ -1,12 +1,14 @@
 package org.ju.cse.cseju.model.syllabus;
 
 import lombok.*;
+import org.ju.cse.cseju.model.syllabus.content.Content;
 import org.ju.cse.cseju.model.syllabus.content.ContentBundle;
 import org.ju.cse.cseju.model.syllabus.content.Table;
 import org.ju.cse.cseju.model.syllabus.content.TextArea;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,6 +24,8 @@ import java.util.List;
         "courseTitle",
         "courseCredit",
         "courseType",
+        "semesterId",
+        "yearId",
         "textAreaList",
         "tableList"
 })
@@ -30,6 +34,8 @@ public class Course {
     private String courseTitle;
     private Double courseCredit;
     private String courseType;
+    private Integer semesterId;
+    private Integer yearId;
 
     private List<TextArea> textAreaList;
     private List<Table> tableList;
@@ -51,15 +57,26 @@ public class Course {
     }
 
     /**
+     * If the List fields are null
+     */
+    public void handleNullPointerExceptionForListFields() {
+        if (this.textAreaList == null) {
+            this.textAreaList = new ArrayList<>();
+        }
+        if (this.tableList == null) {
+            this.tableList = new ArrayList<>();
+        }
+    }
+
+    /**
      * Initiates a Course Object from a type
      *
      * @param contentBundleList
      */
-    public void initializeCourseCourseStructure(List<ContentBundle> contentBundleList) {
-        this.textAreaList = new ArrayList<>();
-        this.tableList = new ArrayList<>();
+    public void initializeWithCourseCourseStructure(List<ContentBundle> contentBundleList) {
+        handleNullPointerExceptionForListFields();
 
-        Integer contentID = 1;
+        Integer contentID = 0;
         for (ContentBundle contentBundle : contentBundleList) {
             if (contentBundle.getSelected() == 0) {
                 TextArea textArea = contentBundle.getTextArea();
@@ -106,5 +123,31 @@ public class Course {
             }
         }
         return codeNumber;
+    }
+
+    /**
+     * @return <p>List<Content> ot Table & TextArea</p>
+     */
+    public List<Content> getContentList() {
+        handleNullPointerExceptionForListFields();
+
+        Content[] contents = new Content[
+                this.textAreaList.size() +
+                        this.tableList.size()
+                ];
+
+        for (TextArea textArea : this.textAreaList) {
+            int contentId = textArea.getTextAreaId();
+            contents[contentId] = new TextArea();
+            contents[contentId] = textArea;
+        }
+
+        for (Table table : this.tableList) {
+            int contentId = table.getTableId();
+            contents[contentId] = new Table();
+            contents[contentId] = table;
+        }
+
+        return Arrays.asList(contents);
     }
 }

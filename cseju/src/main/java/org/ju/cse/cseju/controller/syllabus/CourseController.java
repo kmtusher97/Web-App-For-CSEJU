@@ -36,7 +36,7 @@ public class CourseController {
             @PathVariable("databaseName") String databaseName
     ) {
 
-        ModelAndView modelAndViewCourseInputForm = new ModelAndView(
+        /*ModelAndView modelAndViewCourseInputForm = new ModelAndView(
                 SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
@@ -46,31 +46,50 @@ public class CourseController {
         modelAndViewCourseInputForm.addObject("course", course);
         modelAndViewCourseInputForm.addObject("contentList", contentList);
 
-        return modelAndViewCourseInputForm;
+        return modelAndViewCourseInputForm;*/
+        return null;
     }
 
     /**
-     * <h3>url: /course/inputForm/{databaseName}/{courseCode}</h3>
+     * <h3>url: /course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}</h3>
      *
-     * @param databaseName
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
      * @return
      */
-    @GetMapping("/inputForm/{databaseName}/{courseCode}")
+    @GetMapping("/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}")
     public ModelAndView getCourseInputForm(
-            @PathVariable("databaseName") String databaseName,
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("yearId") Integer yearId,
+            @PathVariable("semesterId") Integer semesterId,
             @PathVariable("courseCode") String courseCode
     ) {
-
-        /*ModelAndView modelAndViewCourseInputForm = new ModelAndView(
+        ModelAndView modelAndViewCourseInputForm = new ModelAndView(
                 SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
-        Course course = courseServices.getCourseInputForm(databaseName, courseCode);
-        modelAndViewCourseInputForm.addObject("course", course);
-        modelAndViewCourseInputForm.addObject("databaseName", databaseName);
+        Course course = courseServices
+                .getCourseBySyllabusNameAndYearIdAndSemesterIdAndCourseCode(
+                        syllabusName,
+                        yearId,
+                        semesterId,
+                        courseCode
+                );
 
-        return modelAndViewCourseInputForm;*/
-        return null;
+        List<Content> contentList = course.getContentList();
+
+        modelAndViewCourseInputForm.addObject(
+                "course",
+                course
+        );
+        modelAndViewCourseInputForm.addObject(
+                "contentList",
+                contentList
+        );
+
+        return modelAndViewCourseInputForm;
     }
 
 

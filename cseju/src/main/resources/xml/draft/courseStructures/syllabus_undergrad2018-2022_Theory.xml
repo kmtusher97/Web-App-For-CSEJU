@@ -5,10 +5,10 @@
         <contentBundle>
             <selected>1</selected>
             <table>
-                <title>Untitled Table</title>
+                <title>Course Content</title>
                 <fields>
-                    <field>Field0</field>
-                    <field>Field2</field>
+                    <field>Title</field>
+                    <field>Description</field>
                 </fields>
                 <rows/>
             </table>
@@ -17,7 +17,7 @@
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>
-        <contentBundle contentBundleId="0">
+        <contentBundle>
             <selected>0</selected>
             <table contentId="0">
                 <title>Untitled Table</title>
@@ -25,12 +25,12 @@
                     <field>Field0</field>
                 </fields>
             </table>
-            <textArea contentId="0">
-                <title>Untitled TextArea</title>
+            <textArea>
+                <title>Course Summary</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>
-        <contentBundle contentBundleId="0">
+        <contentBundle>
             <selected>0</selected>
             <table contentId="0">
                 <title>Untitled Table</title>
@@ -38,8 +38,8 @@
                     <field>Field0</field>
                 </fields>
             </table>
-            <textArea contentId="0">
-                <title>Untitled TextArea</title>
+            <textArea>
+                <title>Learning Outcome</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>

@@ -138,6 +138,7 @@ public class SyllabusDraftController {
      * @param syllabusName
      * @param yearId
      * @param semesterId
+     * @param course
      * @return redirects /syllabusDraft/edit/{syllabusName}
      */
     @PostMapping("/{syllabusName}/addCourse/{yearId}/{semesterId}")
@@ -147,7 +148,7 @@ public class SyllabusDraftController {
             @PathVariable("semesterId") Integer semesterId,
             @ModelAttribute("newCourse") Course course
     ) {
-        course.initializeCourseCourseStructure(
+        course.initializeWithCourseCourseStructure(
                 courseStructureServices.getContentBundleList(
                         syllabusName,
                         course.getCourseType()
