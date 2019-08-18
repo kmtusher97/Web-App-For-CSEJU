@@ -3,4 +3,5 @@
     <courseType>Theory</courseType>
     <courseType>Laboratory</courseType>
     <courseType>Viva Voce</courseType>
+    <courseType>Thesis</courseType>
 </courseTypes>
