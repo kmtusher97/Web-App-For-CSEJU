@@ -39,10 +39,6 @@ public class CourseServices {
         return course;
     }
 
-    public void addRowInTable(String databaseName, int contentId) {
-
-    }
-
 
     /**
      * @param syllabusName
@@ -58,7 +54,8 @@ public class CourseServices {
             String courseCode
     ) {
 
-        SyllabusDraft syllabusDraft = syllabusDraftServices.getSyllabusDraft(syllabusName);
+        SyllabusDraft syllabusDraft =
+                syllabusDraftServices.getSyllabusDraft(syllabusName);
 
         Year year = syllabusDraft.getYearByYearId(yearId);
         Semester semester = year.getSemesterBySemesterId(semesterId);
@@ -66,4 +63,66 @@ public class CourseServices {
 
         return course;
     }
+
+    /**
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
+     * @param contentId
+     */
+    public void addRowInTableByTableId(
+            String syllabusName,
+            Integer yearId,
+            Integer semesterId,
+            String courseCode,
+            Integer contentId
+    ) {
+
+        SyllabusDraft syllabusDraft =
+                syllabusDraftServices.getSyllabusDraft(syllabusName);
+
+        Year year = syllabusDraft.getYearByYearId(yearId);
+        Semester semester = year.getSemesterBySemesterId(semesterId);
+        Course course = semester.getCourseByCourseCode(courseCode);
+        course.addInputRowInTableByTableId(contentId);
+        semester.setCourseByCourseCode(courseCode, course);
+        year.setSemesterBySemesterId(semesterId, semester);
+        syllabusDraft.setYearByYearId(yearId, year);
+
+        syllabusDraftServices.saveOrUpdate(syllabusDraft);
+    }
+
+
+    /**
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
+     * @param contentId
+     * @param rowIndex
+     */
+    public void deleteInputRowFromTableByRowIndex(
+            String syllabusName,
+            Integer yearId,
+            Integer semesterId,
+            String courseCode,
+            Integer contentId,
+            int rowIndex
+    ) {
+        SyllabusDraft syllabusDraft =
+                syllabusDraftServices.getSyllabusDraft(syllabusName);
+
+        Year year = syllabusDraft.getYearByYearId(yearId);
+        Semester semester = year.getSemesterBySemesterId(semesterId);
+        Course course = semester.getCourseByCourseCode(courseCode);
+        course.deleteInputRowFromTableByRowIndex(contentId, rowIndex);
+        semester.setCourseByCourseCode(courseCode, course);
+        year.setSemesterBySemesterId(semesterId, semester);
+        syllabusDraft.setYearByYearId(yearId, year);
+
+        syllabusDraftServices.saveOrUpdate(syllabusDraft);
+    }
+
+
 }

@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <courseStructure>
     <name>Viva Voce</name>
-    <contentBundles>
-        <contentBundle>
-            <selected>0</selected>
-            <table contentId="0">
-                <title>Untitled Table</title>
-                <fields>
-                    <field>Field0</field>
-                </fields>
-            </table>
-            <textArea>
-                <title>Course Summary</title>
-                <textBody>Empty Text Body</textBody>
-            </textArea>
-        </contentBundle>
-    </contentBundles>
+    <contentBundles/>
     <databaseName>syllabus_undergrad2018-2022_Viva Voce</databaseName>
 </courseStructure>

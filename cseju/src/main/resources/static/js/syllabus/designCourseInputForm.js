@@ -5,7 +5,7 @@ function loadFormData() {
 
     var contentBundleList = [];
 
-    for(var i = 0; i < courseContentTableRowCount - 1; i++) {
+    for (var i = 0; i < courseContentTableRowCount - 1; i++) {
         var textArea = {
             title : $('#textArea_'.concat(i, '_field1Name')).val(),
             textBody : "Empty Text Body"
@@ -16,7 +16,7 @@ function loadFormData() {
                 'table_'.concat(i, 'FieldNameTable')
         ).rows[0].cells.length;
 
-        for(var j = 0; j < countOfFieldNamesOfTable; j++) {
+        for (var j = 0; j < countOfFieldNamesOfTable; j++) {
             var tableContentFieldName = $('#contentTable'.concat(i, 'FieldName', j)).val();
             fields.push(tableContentFieldName);
         }

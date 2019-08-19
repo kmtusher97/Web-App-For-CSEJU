@@ -2,10 +2,12 @@ package org.ju.cse.cseju.controller.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.Course;
 import org.ju.cse.cseju.model.syllabus.content.Content;
+import org.ju.cse.cseju.model.syllabus.content.Contents;
 import org.ju.cse.cseju.service.syllabus.CourseServices;
 import org.ju.cse.cseju.service.syllabus.CourseStructureServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,6 +72,11 @@ public class CourseController {
                 SYLLABUS_VIEW_INPUT + "courseInputForm"
         );
 
+        modelAndViewCourseInputForm.addObject(
+                "syllabusName",
+                syllabusName
+        );
+
         Course course = courseServices
                 .getCourseBySyllabusNameAndYearIdAndSemesterIdAndCourseCode(
                         syllabusName,
@@ -78,30 +85,95 @@ public class CourseController {
                         courseCode
                 );
 
-        List<Content> contentList = course.getContentList();
-
         modelAndViewCourseInputForm.addObject(
                 "course",
                 course
         );
+
+        Contents contents = new Contents(
+                course.getContentList()
+        );
+
         modelAndViewCourseInputForm.addObject(
-                "contentList",
-                contentList
+                "contents",
+                contents
         );
 
         return modelAndViewCourseInputForm;
     }
 
 
-    @GetMapping("/{databaseName}/add_input_row/{contentId}")
+    /**
+     * <h3>url: /course/{syllabusName}/{yearId}/{semesterId}/{courseCode}/addInputRow/{contentId}</h3>
+     *
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
+     * @param contentId
+     * @return redirect:/course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}
+     */
+    @GetMapping("/{syllabusName}/{yearId}/{semesterId}/{courseCode}/addInputRow/{contentId}")
     public ModelAndView addInputRowInTable(
-            @PathVariable("databaseName") String databaseName,
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("yearId") Integer yearId,
+            @PathVariable("semesterId") Integer semesterId,
+            @PathVariable("courseCode") String courseCode,
             @PathVariable("contentId") Integer contentId
     ) {
-        courseServices.addRowInTable(databaseName, (int) contentId);
+        courseServices.addRowInTableByTableId(
+                syllabusName,
+                yearId,
+                semesterId,
+                courseCode,
+                contentId
+        );
 
         return new ModelAndView(
-                "redirect:/course/inputForm/" + databaseName
+                "redirect:/course/inputForm/" +
+                        syllabusName + "/" +
+                        yearId + "/" +
+                        semesterId + "/" +
+                        courseCode
+        );
+    }
+
+
+    /**
+     * <h3>url: /course/{syllabusName}/{yearId}/{semesterId}/{courseCode}/deleteInputRow/{contentId}/{rowIndex}</h3>
+     *
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
+     * @param contentId
+     * @param rowIndex
+     * @return redirect:/course/inputForm/{syllabusName}/{yearId}/{semesterId}/{courseCode}
+     */
+    @GetMapping("/{syllabusName}/{yearId}/{semesterId}/{courseCode}/deleteInputRow/{contentId}/{rowIndex}")
+    public ModelAndView deleteInputRowFromTableByRowIndex(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("yearId") Integer yearId,
+            @PathVariable("semesterId") Integer semesterId,
+            @PathVariable("courseCode") String courseCode,
+            @PathVariable("contentId") Integer contentId,
+            @PathVariable("rowIndex") int rowIndex
+    ) {
+        courseServices.deleteInputRowFromTableByRowIndex(
+                syllabusName,
+                yearId,
+                semesterId,
+                courseCode,
+                contentId,
+                rowIndex
+        );
+
+        return new ModelAndView(
+                "redirect:/course/inputForm/" +
+                        syllabusName + "/" +
+                        yearId + "/" +
+                        semesterId + "/" +
+                        courseCode
         );
     }
 }

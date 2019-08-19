@@ -9,6 +9,7 @@
     <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
+    <script th:src="@{/js/syllabus/courseInputForm.js}"></script>
 </head>
 <body>
 <div class=""
@@ -22,6 +23,19 @@
 
     <section>
 
+        <div class="">
+            <h3 id="syllabusName"
+                th:text="${syllabusName}"></h3>
+
+            <div style="display: none">
+                <p id="yearId" th:text="${course.yearId}"></p>
+                <p id="semesterId" th:text="${course.semesterId}"></p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+
         <div class=""
              id="courseBasicInfoDiv">
 
@@ -30,7 +44,7 @@
                 <tr>
                     <th>Course Code</th>
                     <td>:</td>
-                    <td th:text="${course.courseCode}"></td>
+                    <td id="courseCode" th:text="${course.courseCode}"></td>
                     <th>Credit</th>
                     <td>:</td>
                     <td th:text="${course.courseCredit}"></td>
@@ -49,95 +63,123 @@
     </section>
 
     <section>
-        <form>
-            <section class=""
-                     th:each="content, contentId : ${contentList}">
+        <form class=""
+              id="contentInputForm">
 
-                <div class=""
-                     th:id="'content_' + ${contentId.index}">
+            <table class=""
+                   border="1"
+                   id="contentsTable">
 
-                    <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.TextArea)}"
-                         class=""
-                         th:id="'textAreaDiv_' + ${contentId.index}">
-                        <table class=""
-                               border="1"
-                               th:id="'inputTable_' + ${contentId.index}">
+                <tbody>
+                <tr id="contentInputRow"
+                    th:each="content, contentId : ${contents.contentList}">
 
-                            <thead>
-                            <tr>
-                                <th>
-                                    <div>
-                                        <h5 th:text="${content.title}"></h5>
-                                    </div>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                <textarea class=""
-                                          th:id="'textArea_textBody' + ${contentId.index}"
-                                          th:value="${content.textBody}">
-                                </textarea>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <td>
+                        <div class=""
+                             th:id="'content_' + ${contentId.index}">
 
-                    <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.Table)}"
-                         class=""
-                         th:id="'tableDiv_' + ${contentId.index}"
-                         th:with="table = ${content}">
+                            <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.TextArea)}"
+                                 class=""
+                                 th:id="'textAreaDiv_' + ${contentId.index}"
+                                 th:with="textArea = ${content}">
 
-                        <table class=""
-                               border="1"
-                               th:id="'inputTable_' + ${contentId.index}">
+                                <table class=""
+                                       border="1"
+                                       th:id="'inputTable_' + ${contentId.index}">
 
-                            <thead>
-                            <tr>
-                                <td th:colspan="${table.fields.size()}">
-                                    <div>
-                                        <h5 th:text="${table.title}"></h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td th:each="fieldName, fieldNameId : ${table.fields}">
-                                    <div>
-                                        <h6 th:text="${fieldName}"></h6>
-                                    </div>
-                                </td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!--<tr th:each="row, rowId : ${content.rows}">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <div>
+                                                <h5 th:id="'textAreaTitle_' + ${contentId.index}"
+                                                    th:text="${textArea.title}"></h5>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <textarea class=""
+                                                      th:id="'textAreaTextBody_' + ${contentId.index}"
+                                                      th:text="${content.textBody}">
+                                            </textarea>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                <td th:each="cell, cellId : ${row.cells}">
-                                    <textarea class=""
-                                              th:id="'cell_' + ${rowId.index} + '_' + ${cellId.index}"
-                                              th:value="${cell}"></textarea>
-                                </td>
-                            </tr>-->
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td>OKKKKKKKKK</td>
-                                <!--<td th:colspan="${#lists.size(content.fields)}">
+                            <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.Table)}"
+                                 class=""
+                                 th:id="'tableDiv_' + ${contentId.index}"
+                                 th:with="table = ${content}">
 
-                                    &lt;!&ndash;Add new input row
-                                    url: /course/{databaseName}/add_input_row/{contentId}&ndash;&gt;
-                                    <a class=""
-                                       th:id="'addRow_' + ${contentId.index}"
-                                       th:href="@{'/course/' + ${databaseName} + '/add_input_row/' + ${contentId.index}}">Add
-                                        +</a>
-                                </td>-->
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </section>
+                                <table class=""
+                                       border="1"
+                                       th:id="'inputTable_' + ${contentId.index}">
+
+                                    <thead>
+                                    <tr>
+                                        <td th:colspan="${table.fields.size() + 1}">
+                                            <div>
+                                                <h5 th:id="'tableTitle_' + ${contentId.index}"
+                                                    th:text="${table.title}"></h5>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td th:each="fieldName, fieldNameId : ${table.fields}">
+                                            <div>
+                                                <h5 th:id="'table_' + ${contentId.index} + 'fieldName_'
+                                                                + ${fieldNameId.index}"
+                                                    th:text="${fieldName}"></h5>
+                                            </div>
+                                        </td>
+                                        <td>Action</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="row, rowId : ${content.rows}">
+
+                                        <td th:each="cell, cellId : ${row.cells}">
+                                        <textarea class=""
+                                                  th:id="'table_' + ${contentId.index} + 'cell_' + ${rowId.index} + '_' + ${cellId.index}"
+                                                  th:text="${cell}"></textarea>
+                                        </td>
+                                        <td>
+                                            <!--Add new input row
+                                            url: /course/{syllabusName}/{yearId}/{semesterId}/{courseCode}/deleteInputRow/{contentId}/{rowIndex}-->
+                                            <a class=""
+                                               th:id="'deleteRow_' + ${rowId.index}"
+                                               th:href="@{'/course/' + ${syllabusName} + '/' + ${course.yearId} + '/' +
+                                                        ${course.semesterId} + '/' + ${course.courseCode} + '/deleteInputRow/' +
+                                                            ${table.tableId} + '/' + ${rowId.index}}">Delete</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td th:colspan="${#lists.size(content.fields) + 1}">
+
+                                            <!--Add new input row
+                                            url: /course/{syllabusName}/{yearId}/{semesterId}/{courseCode}/addInputRow/{contentId}-->
+                                            <a class=""
+                                               th:id="'addRow_' + ${contentId.index}"
+                                               th:href="@{'/course/' + ${syllabusName} + '/' + ${course.yearId} + '/' +
+                                                        ${course.semesterId} + '/' + ${course.courseCode} + '/addInputRow/' +
+                                                            ${table.tableId}}">Row +</a>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </form>
     </section>
 </div>

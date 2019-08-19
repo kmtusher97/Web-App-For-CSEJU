@@ -9,76 +9,39 @@
                 <semester semesterId="1">
                     <courses>
                         <course courseCode="CSE 101">
-                            <courseTitle>Computer Fundamentals</courseTitle>
+                            <courseTitle>Computer Fundamental</courseTitle>
                             <courseType>Theory</courseType>
                             <semesterId>1</semesterId>
                             <yearId>1</yearId>
-                            <content contentId="1">
+                            <textArea contentId="0">
 <title>Course Summary</title>
 <textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="2">
-<title>Learning Outcome</title>
+                            </textArea>
+                            <textArea contentId="1">
+<title>Learning Outcomes</title>
 <textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="0">
+                            </textArea>
+                            <table contentId="2">
 <title>Course Content</title>
-                            </content>
-                        </course>
-                        <course courseCode="CSE 106">
-                            <courseTitle>Computer Fundamentals</courseTitle>
-                            <courseType>Theory</courseType>
-                            <semesterId>1</semesterId>
-                            <yearId>1</yearId>
-                            <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="0">
-<title>Course Content</title>
-                            </content>
-                        </course>
-                    </courses>
-                </semester>
-                <semester semesterId="2">
-                    <courses>
-                        <course courseCode="CSE 151">
-                            <courseTitle>Mathematics II</courseTitle>
-                            <courseType>Theory</courseType>
-                            <semesterId>2</semesterId>
-                            <yearId>1</yearId>
-                            <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="0">
-<title>Course Content</title>
-                            </content>
-                        </course>
-                        <course courseCode="CSE 153">
-                            <courseTitle>Electronic Devices and Circuits-II</courseTitle>
-                            <courseType>Theory</courseType>
-                            <semesterId>2</semesterId>
-                            <yearId>1</yearId>
-                            <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
-                            </content>
-                            <content contentId="0">
-<title>Course Content</title>
-                            </content>
+<fields>
+    <field>Title</field>
+    <field>Description</field>
+</fields>
+<rows>
+    <row tableRowId="0">
+        <cells>
+            <cell>cell0</cell>
+            <cell>cell1</cell>
+        </cells>
+    </row>
+    <row tableRowId="0">
+        <cells>
+            <cell>cell0</cell>
+            <cell>cell1</cell>
+        </cells>
+    </row>
+</rows>
+                            </table>
                         </course>
                     </courses>
                 </semester>

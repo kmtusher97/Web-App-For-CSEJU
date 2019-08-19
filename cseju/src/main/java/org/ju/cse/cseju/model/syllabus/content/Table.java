@@ -53,6 +53,16 @@ public class Table extends Content implements Serializable {
         return rows;
     }
 
+
+    public void handleNullPointerExceptionForListFields() {
+        if (this.fields == null) {
+            this.fields = new ArrayList<>();
+        }
+        if (this.rows == null) {
+            this.rows = new ArrayList<>();
+        }
+    }
+
     /**
      * Add a new field
      */
@@ -80,9 +90,8 @@ public class Table extends Content implements Serializable {
      * @param rowId
      */
     public void addRow(int rowId) {
-        if (this.rows == null) {
-            this.rows = new ArrayList<>();
-        }
+        handleNullPointerExceptionForListFields();
+
         TableRow tableRow = new TableRow();
         tableRow.setTableRowId(rowId);
         for (int i = 0; i < this.fields.size(); i++) {
@@ -102,5 +111,16 @@ public class Table extends Content implements Serializable {
         table.addNewField();
 
         return table;
+    }
+
+    /**
+     * @param rowIndex
+     */
+    public void deleteRowByRowIndex(int rowIndex) {
+        handleNullPointerExceptionForListFields();
+
+        if (rowIndex >= this.rows.size()) return;
+
+        this.rows.remove(rowIndex);
     }
 }

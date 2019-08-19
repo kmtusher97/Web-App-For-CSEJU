@@ -3,21 +3,6 @@
     <name>Theory</name>
     <contentBundles>
         <contentBundle>
-            <selected>1</selected>
-            <table>
-                <title>Course Content</title>
-                <fields>
-                    <field>Title</field>
-                    <field>Description</field>
-                </fields>
-                <rows/>
-            </table>
-            <textArea contentId="0">
-                <title>Untitled TextArea</title>
-                <textBody>Empty Text Body</textBody>
-            </textArea>
-        </contentBundle>
-        <contentBundle>
             <selected>0</selected>
             <table contentId="0">
                 <title>Untitled Table</title>
@@ -39,7 +24,22 @@
                 </fields>
             </table>
             <textArea>
-                <title>Learning Outcome</title>
+                <title>Learning Outcomes</title>
+                <textBody>Empty Text Body</textBody>
+            </textArea>
+        </contentBundle>
+        <contentBundle>
+            <selected>1</selected>
+            <table>
+                <title>Course Content</title>
+                <fields>
+                    <field>Title</field>
+                    <field>Description</field>
+                </fields>
+                <rows/>
+            </table>
+            <textArea contentId="0">
+                <title>Untitled TextArea</title>
                 <textBody>Empty Text Body</textBody>
             </textArea>
         </contentBundle>

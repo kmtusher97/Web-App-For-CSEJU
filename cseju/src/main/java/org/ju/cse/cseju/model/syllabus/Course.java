@@ -46,12 +46,12 @@ public class Course {
         return courseCode;
     }
 
-    @XmlElement(name = "content")
+    @XmlElement(name = "textArea")
     public List<TextArea> getTextAreaList() {
         return textAreaList;
     }
 
-    @XmlElement(name = "content")
+    @XmlElement(name = "table")
     public List<Table> getTableList() {
         return tableList;
     }
@@ -149,5 +149,34 @@ public class Course {
         }
 
         return Arrays.asList(contents);
+    }
+
+    /**
+     * @param tableId
+     */
+    public void addInputRowInTableByTableId(Integer tableId) {
+        handleNullPointerExceptionForListFields();
+
+        for (Table table : this.tableList) {
+            if (table.getTableId() != tableId) continue;
+            table.addRow(0);
+            break;
+        }
+    }
+
+
+    /**
+     * @param tableId
+     * @param rowIndex
+     */
+    public void deleteInputRowFromTableByRowIndex(Integer tableId,
+                                                  int rowIndex) {
+        handleNullPointerExceptionForListFields();
+
+        for (Table table : this.tableList) {
+            if (table.getTableId() != tableId) continue;
+            table.deleteRowByRowIndex(rowIndex);
+            break;
+        }
     }
 }
