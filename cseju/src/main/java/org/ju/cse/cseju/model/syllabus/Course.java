@@ -5,6 +5,7 @@ import org.ju.cse.cseju.model.syllabus.content.Content;
 import org.ju.cse.cseju.model.syllabus.content.ContentBundle;
 import org.ju.cse.cseju.model.syllabus.content.Table;
 import org.ju.cse.cseju.model.syllabus.content.TextArea;
+import org.ju.cse.cseju.model.syllabus.organizer.ContentDetail;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -66,6 +67,16 @@ public class Course {
         if (this.tableList == null) {
             this.tableList = new ArrayList<>();
         }
+    }
+
+    /**
+     * @return <p><b>int</b> total number of contents</p>
+     */
+    public int getTotalNumberOfContents() {
+        handleNullPointerExceptionForListFields();
+
+        return (this.textAreaList.size() +
+                this.tableList.size());
     }
 
     /**
@@ -131,20 +142,16 @@ public class Course {
     public List<Content> getContentList() {
         handleNullPointerExceptionForListFields();
 
-        Content[] contents = new Content[
-                this.textAreaList.size() +
-                        this.tableList.size()
-                ];
+        Content[] contents =
+                new Content[getTotalNumberOfContents()];
 
         for (TextArea textArea : this.textAreaList) {
             int contentId = textArea.getTextAreaId();
-            contents[contentId] = new TextArea();
             contents[contentId] = textArea;
         }
 
         for (Table table : this.tableList) {
             int contentId = table.getTableId();
-            contents[contentId] = new Table();
             contents[contentId] = table;
         }
 

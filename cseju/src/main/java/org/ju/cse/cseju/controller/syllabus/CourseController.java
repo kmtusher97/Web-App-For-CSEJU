@@ -2,6 +2,7 @@ package org.ju.cse.cseju.controller.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.Course;
 import org.ju.cse.cseju.model.syllabus.content.Content;
+import org.ju.cse.cseju.model.syllabus.organizer.ContentDetail;
 import org.ju.cse.cseju.service.syllabus.CourseServices;
 import org.ju.cse.cseju.service.syllabus.CourseStructureServices;
 import org.springframework.stereotype.Controller;
@@ -78,15 +79,19 @@ public class CourseController {
                         courseCode
                 );
 
-        List<Content> contentList = course.getContentList();
-
         modelAndViewCourseInputForm.addObject(
                 "course",
                 course
         );
+
+        List<ContentDetail> contentDetailList =
+                courseServices.getContentDetailList(
+                        course
+                );
+
         modelAndViewCourseInputForm.addObject(
-                "contentList",
-                contentList
+                "contentDetailList",
+                contentDetailList
         );
 
         return modelAndViewCourseInputForm;

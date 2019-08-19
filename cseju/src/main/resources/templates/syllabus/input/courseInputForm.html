@@ -51,17 +51,19 @@
     <section>
         <form>
             <section class=""
-                     th:each="content, contentId : ${contentList}">
+                     th:each="contentDetail, contentDetailId : ${contentDetailList}">
 
                 <div class=""
-                     th:id="'content_' + ${contentId.index}">
+                     th:id="'content_' + ${contentDetailId.index}">
 
-                    <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.TextArea)}"
+                    <div th:if="${contentDetail.contentType == 0}"
                          class=""
-                         th:id="'textAreaDiv_' + ${contentId.index}">
+                         th:id="'textAreaDiv_' + ${contentDetailId.index}"
+                         th:with="content = ${course.textAreaList[contentDetail.contentIndex]}">
+
                         <table class=""
                                border="1"
-                               th:id="'inputTable_' + ${contentId.index}">
+                               th:id="'inputTable_' + ${contentDetailId.index}">
 
                             <thead>
                             <tr>
@@ -76,7 +78,7 @@
                             <tr>
                                 <td>
                                 <textarea class=""
-                                          th:id="'textArea_textBody' + ${contentId.index}"
+                                          th:id="'textArea_textBody' + ${contentDetailId.index}"
                                           th:value="${content.textBody}">
                                 </textarea>
                                 </td>
@@ -85,7 +87,7 @@
                         </table>
                     </div>
 
-                    <div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.Table)}"
+                    <!--<div th:if="${content instanceof T(org.ju.cse.cseju.model.syllabus.content.Table)}"
                          class=""
                          th:id="'tableDiv_' + ${contentId.index}"
                          th:with="table = ${content}">
@@ -111,19 +113,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!--<tr th:each="row, rowId : ${content.rows}">
+                            &lt;!&ndash;<tr th:each="row, rowId : ${content.rows}">
 
                                 <td th:each="cell, cellId : ${row.cells}">
                                     <textarea class=""
                                               th:id="'cell_' + ${rowId.index} + '_' + ${cellId.index}"
                                               th:value="${cell}"></textarea>
                                 </td>
-                            </tr>-->
+                            </tr>&ndash;&gt;
                             </tbody>
                             <tfoot>
                             <tr>
                                 <td>OKKKKKKKKK</td>
-                                <!--<td th:colspan="${#lists.size(content.fields)}">
+                                &lt;!&ndash;<td th:colspan="${#lists.size(content.fields)}">
 
                                     &lt;!&ndash;Add new input row
                                     url: /course/{databaseName}/add_input_row/{contentId}&ndash;&gt;
@@ -131,11 +133,11 @@
                                        th:id="'addRow_' + ${contentId.index}"
                                        th:href="@{'/course/' + ${databaseName} + '/add_input_row/' + ${contentId.index}}">Add
                                         +</a>
-                                </td>-->
+                                </td>&ndash;&gt;
                             </tr>
                             </tfoot>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
             </section>
         </form>
