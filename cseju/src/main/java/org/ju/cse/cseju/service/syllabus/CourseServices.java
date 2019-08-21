@@ -124,5 +124,30 @@ public class CourseServices {
         syllabusDraftServices.saveOrUpdate(syllabusDraft);
     }
 
+    /**
+     * @param syllabusName
+     * @param yearId
+     * @param semesterId
+     * @param courseCode
+     * @param course
+     */
+    public void saveCourseByCourseCode(
+            String syllabusName,
+            Integer yearId,
+            Integer semesterId,
+            String courseCode,
+            Course course
+    ) {
+        SyllabusDraft syllabusDraft =
+                syllabusDraftServices.getSyllabusDraft(syllabusName);
 
+        Year year = syllabusDraft.getYearByYearId(yearId);
+        Semester semester = year.getSemesterBySemesterId(semesterId);
+        semester.deleteCourseByCourseCode(courseCode);
+        semester.setCourseByCourseCode(courseCode, course);
+        year.setSemesterBySemesterId(semesterId, semester);
+        syllabusDraft.setYearByYearId(yearId, year);
+
+        syllabusDraftServices.saveOrUpdate(syllabusDraft);
+    }
 }

@@ -64,7 +64,7 @@ function loadFormData() {
     }
 
     var contents = {
-        contentList: contentList;
+        contentList: contentList
     };
 
     return contents;
@@ -83,11 +83,11 @@ $(document).ready(function() {
             $('#syllabusName').text(), '/',
             $('#yearId').text(), '/',
             $('#semesterId').text(), '/',
-            $('#courseCode').text
+            $('#courseCode').text()
         );
 
         console.log(postUrl);
-        console.log(course);
+        console.log(contents);
 
         $.ajax({
             type: 'POST',
