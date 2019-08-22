@@ -44,6 +44,13 @@
       <version>9.0</version>
     </dependency>
 
+    <!--context-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>5.1.4.RELEASE</version>
+    </dependency>
+
     <!--WebJars-->
     <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
     <dependency>
