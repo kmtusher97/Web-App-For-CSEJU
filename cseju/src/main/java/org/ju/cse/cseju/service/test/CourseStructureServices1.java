@@ -1,6 +1,7 @@
 package org.ju.cse.cseju.service.test;
 
 import org.ju.cse.cseju.model.syllabus.CourseStructure;
+import org.ju.cse.cseju.model.syllabus.content.ContentBundle;
 import org.ju.cse.cseju.repository.basex.BaseXRepository;
 import org.ju.cse.cseju.service.jaxb.JAXBServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,12 @@ public class CourseStructureServices1 {
     @Autowired
     private BaseXRepository baseXRepository;
 
-    public CourseStructure getCourseStructure(
+    /**
+     * @param syllabusName
+     * @param courseType
+     * @return CourseStructure
+     */
+    public CourseStructure getCourseStructureByCourseType(
             String syllabusName,
             String courseType
     ) {
@@ -35,6 +41,55 @@ public class CourseStructureServices1 {
         return (CourseStructure) jaxbServices.xmlStringToObject(
                 result,
                 new CourseStructure()
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     */
+    public void addContentBundleByCourseType(
+            String syllabusName,
+            String courseType
+    ) {
+        ContentBundle contentBundle = new ContentBundle();
+        contentBundle = contentBundle.getInitialContentBundle();
+
+        contentBundle.setContentBundleId(
+                getCountOfContentBundle(
+                        syllabusName,
+                        courseType
+                )
+        );
+
+        baseXRepository.saveOrUpdate(
+                PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
+                        syllabusName + "\"]//" + PARENT1_NODE,
+                PARENT1_NODE_ATTRIBUTE_NAME,
+                courseType,
+                jaxbServices.objectToXmlString(contentBundle, false),
+                "contentBundle",
+                "contentBundleId",
+                Integer.toString(contentBundle.getContentBundleId())
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseType
+     * @return CountOfContentBundle
+     */
+    private Integer getCountOfContentBundle(
+            String syllabusName,
+            String courseType
+    ) {
+        return Integer.parseInt(
+                baseXRepository.getCountOfElement(
+                        PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
+                                syllabusName + "\"]//" + PARENT1_NODE + "[@" +
+                                PARENT1_NODE_ATTRIBUTE_NAME + "=\"" + courseType + "\"]//" +
+                                "contentBundle"
+                )
         );
     }
 }

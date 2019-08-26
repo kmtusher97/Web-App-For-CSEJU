@@ -22,7 +22,7 @@ public class CourseStructureController1 {
     private CourseStructureServices1 courseStructureServices;
 
     /**
-     * <h3>url: /course_structure/design/{syllabusName}/{courseType}</h3>
+     * <h3>url: /courseStructure/design/{syllabusName}/{courseType}</h3>
      *
      * @param syllabusName
      * @param courseType
@@ -38,7 +38,7 @@ public class CourseStructureController1 {
         );
 
         CourseStructure courseStructure =
-                courseStructureServices.getCourseStructure(
+                courseStructureServices.getCourseStructureByCourseType(
                         syllabusName,
                         courseType
                 );
@@ -47,7 +47,39 @@ public class CourseStructureController1 {
                 "courseStructure",
                 courseStructure
         );
+        modelAndViewDesignCourseInputForm.addObject(
+                "syllabusName",
+                syllabusName
+        );
+        modelAndViewDesignCourseInputForm.addObject(
+                "courseType",
+                courseType
+        );
 
         return modelAndViewDesignCourseInputForm;
+    }
+
+
+    /**
+     * <h3>url: /courseStructure/addContentBundle/{syllabusName}/{courseType}</h3>
+     *
+     * @param syllabusName
+     * @param courseType
+     * @return redirects to courseStructure/design/{syllabusName}/{courseType}
+     */
+    @GetMapping("/addContentBundle/{syllabusName}/{courseType}")
+    public ModelAndView addContentBundle(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseType") String courseType
+    ) {
+        courseStructureServices.addContentBundleByCourseType(
+                syllabusName,
+                courseType
+        );
+
+        return new ModelAndView(
+                "redirect:/courseStructure/design/" +
+                        syllabusName + "/" + courseType
+        );
     }
 }

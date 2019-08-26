@@ -217,4 +217,14 @@ public class BaseXRepository {
                         "\"]  return data($nd//" + nodeName + ")"
         );
     }
+
+    /**
+     * @param node
+     * @return count of node
+     */
+    public String getCountOfElement(String node) {
+        return read(
+                "count(" + node + ")"
+        );
+    }
 }

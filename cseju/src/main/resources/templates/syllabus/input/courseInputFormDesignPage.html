@@ -175,7 +175,8 @@
                             <!--Delete this ContentBundle
                             url: /course_structure/delete_contentBundle/{databaseName}/{contentBundleIndex}-->
                             <a type="button"
-                               th:href="@{'/course_structure/delete_contentBundle/' + ${courseStructure.databaseName} + '/' + ${rowId.index}}">Delete</a>
+                               th:href="@{'/course_structure/delete_contentBundle/' +
+                                            ${courseStructure.databaseName} + '/' + ${rowId.index}}">Delete</a>
                         </div>
                     </div>
                 </td>
@@ -190,7 +191,8 @@
                         <!--Add a new ContentBundle in the CourseStructure(CourseStructure)
                         url: /course_structure/add_ContentBundle/{databaseName} -->
                         <a type="button"
-                           th:href="@{'/course_structure/add_ContentBundle/' + ${courseStructure.databaseName}}">
+                           th:href="@{'/courseStructure/addContentBundle/' +
+                                        ${syllabusName} + '/' + ${courseType}}">
                             Add +
                         </a>
                     </div>
