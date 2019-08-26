@@ -14,15 +14,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @AllArgsConstructor
 @XmlRootElement(name = "courseType")
 public class CourseType {
-    private Integer id;
     private String courseTypeName;
 
-    @XmlAttribute
-    public Integer getId() {
-        return id;
-    }
-
+    @XmlAttribute(name = "name")
     public String getCourseTypeName() {
         return courseTypeName;
     }
+
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author tshr
  */
@@ -24,32 +26,38 @@ public class TestController {
     @Autowired
     private BaseXRepository baseXRepository;
 
-    @GetMapping("/addNewCourseType/{id}/{name}")
+    @GetMapping("/addNewCourseType/{name}")
     public String testAddNewCourseType(
-            @PathVariable("id") Integer id,
             @PathVariable("name") String name
     ) {
         CourseType courseType =
-                new CourseType(id, name);
+                new CourseType(name);
 
         courseTypeServices.addNewCourseType(
                 SYLLABUS_NAME,
                 courseType
         );
         System.err.println(baseXRepository.read("/"));
-        return courseTypeServices.getCourseTypeBySyllabusNameAndId(
+        return courseTypeServices.getCourseTypeByCourseTypeName(
                 SYLLABUS_NAME,
-                id
+                name
         ).toString();
     }
 
-    @GetMapping("/deleteCourseType/{id}")
-    public String testDeleteCourseTypeById(@PathVariable("id") Integer id) {
-        courseTypeServices.deleteCourseTypeBySyllabusNameAndId(
+    @GetMapping("/deleteCourseType/{name}")
+    public String testDeleteCourseTypeById(@PathVariable("name") String name) {
+        courseTypeServices.deleteCourseTypeByCourseTypeName(
                 SYLLABUS_NAME,
-                id
+                name
         );
         System.err.println(baseXRepository.read("/"));
         return baseXRepository.read("/");
+    }
+
+    @GetMapping("/getAll/{syllabusName}")
+    public List<String> testgetAllCourseTypeNamesBySyllabusName(
+            @PathVariable("syllabusName") String syllabusName
+    ) {
+        return (List<String>) courseTypeServices.getAllCourseTypeNames(syllabusName);
     }
 }

@@ -6,6 +6,7 @@ import org.ju.cse.cseju.service.jaxb.JAXBServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class CourseTypeServices {
     private static final String PARENT_NODE = "courseTypes";
     private static final String PARENT_NODE_ATTRIBUTE_NAME = "syllabusName";
     private static final String NODE_NAME = "courseType";
-    private static final String NODE_ATTRIBUTE_NAME = "id";
+    private static final String NODE_ATTRIBUTE_NAME = "name";
 
     private static JAXBServices jaxbServices = new JAXBServices();
 
@@ -25,9 +26,21 @@ public class CourseTypeServices {
     private BaseXRepository baseXRepository;
 
 
-    /*public  getAllCourseTypes() {
+    /**
+     * @param syllabusName
+     * @return
+     */
+    public List<String> getAllCourseTypeNames(String syllabusName) {
+        String result = baseXRepository.getAllAsData(
+                PARENT_NODE,
+                PARENT_NODE_ATTRIBUTE_NAME,
+                syllabusName,
+                "courseType/(@name)"
+        );
 
-    }*/
+        String[] courseTypeNames = result.split("\n");
+        return Arrays.asList(courseTypeNames);
+    }
 
     /**
      * @param syllabusName
@@ -45,26 +58,36 @@ public class CourseTypeServices {
                 ),
                 NODE_NAME,
                 NODE_ATTRIBUTE_NAME,
-                Integer.toString(courseType.getId())
+                courseType.getCourseTypeName()
+        );
+
+        /**initialize course structure**/
+        baseXRepository.insert(
+                NODE_NAME,
+                NODE_ATTRIBUTE_NAME,
+                courseType.getCourseTypeName(),
+                "<courseStructure/>"
         );
     }
 
     /**
      * @param syllabusName
-     * @param id
+     * @param courseTypeName
      * @return CourseTypeBySyllabusNameAndId
      */
-    public CourseType getCourseTypeBySyllabusNameAndId(String syllabusName,
-                                                       Integer id) {
+    public CourseType getCourseTypeByCourseTypeName(
+            String syllabusName,
+            String courseTypeName
+    ) {
         return (CourseType) jaxbServices
                 .xmlStringToObject(
-                        baseXRepository.getByParentAnId(
+                        baseXRepository.getByParentAndId(
                                 PARENT_NODE,
                                 PARENT_NODE_ATTRIBUTE_NAME,
                                 syllabusName,
                                 NODE_NAME,
                                 NODE_ATTRIBUTE_NAME,
-                                Integer.toString(id)
+                                courseTypeName
                         ),
                         new CourseType()
                 );
@@ -72,17 +95,19 @@ public class CourseTypeServices {
 
     /**
      * @param syllabusName
-     * @param id
+     * @param courseTypeName
      */
-    public void deleteCourseTypeBySyllabusNameAndId(String syllabusName,
-                                                    Integer id) {
+    public void deleteCourseTypeByCourseTypeName(
+            String syllabusName,
+            String courseTypeName
+    ) {
         baseXRepository.delete(
                 PARENT_NODE,
                 PARENT_NODE_ATTRIBUTE_NAME,
                 syllabusName,
                 NODE_NAME,
                 NODE_ATTRIBUTE_NAME,
-                Integer.toString(id)
+                courseTypeName
         );
     }
 }

@@ -14,15 +14,15 @@
                             <semesterId>1</semesterId>
                             <yearId>1</yearId>
                             <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Course Summary</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Learning Outcome</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="0">
-<title>Course Content</title>
+                                <title>Course Content</title>
                             </content>
                         </course>
                         <course courseCode="CSE 106">
@@ -31,15 +31,15 @@
                             <semesterId>1</semesterId>
                             <yearId>1</yearId>
                             <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Course Summary</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Learning Outcome</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="0">
-<title>Course Content</title>
+                                <title>Course Content</title>
                             </content>
                         </course>
                     </courses>
@@ -52,15 +52,15 @@
                             <semesterId>2</semesterId>
                             <yearId>1</yearId>
                             <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Course Summary</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Learning Outcome</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="0">
-<title>Course Content</title>
+                                <title>Course Content</title>
                             </content>
                         </course>
                         <course courseCode="CSE 153">
@@ -69,15 +69,15 @@
                             <semesterId>2</semesterId>
                             <yearId>1</yearId>
                             <content contentId="1">
-<title>Course Summary</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Course Summary</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="2">
-<title>Learning Outcome</title>
-<textBody>Empty Text Body</textBody>
+                                <title>Learning Outcome</title>
+                                <textBody>Empty Text Body</textBody>
                             </content>
                             <content contentId="0">
-<title>Course Content</title>
+                                <title>Course Content</title>
                             </content>
                         </course>
                     </courses>

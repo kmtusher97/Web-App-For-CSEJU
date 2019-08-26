@@ -58,12 +58,14 @@ public class BaseXRepository {
      * @param nodeAttributeValue
      * @return XML String getByParentAnId
      */
-    public String getByParentAnId(String parent,
-                                  String parentAttributeName,
-                                  String parentAttributeValue,
-                                  String nodeName,
-                                  String nodeAttributeName,
-                                  String nodeAttributeValue) {
+    public String getByParentAndId(
+            String parent,
+            String parentAttributeName,
+            String parentAttributeValue,
+            String nodeName,
+            String nodeAttributeName,
+            String nodeAttributeValue
+    ) {
 
         return read(
                 "//" + parent + "[@" + parentAttributeName + "=\"" +
@@ -80,10 +82,12 @@ public class BaseXRepository {
      * @param attributeValue
      * @param node
      */
-    public void insert(String parent,
-                       String attributeName,
-                       String attributeValue,
-                       String node) {
+    public void insert(
+            String parent,
+            String attributeName,
+            String attributeValue,
+            String node
+    ) {
         write(
                 "insert node " + node + " into //" + parent
                         + "[@" + attributeName + "=\"" + attributeValue + "\"]"
@@ -98,9 +102,11 @@ public class BaseXRepository {
      * @param attributeName
      * @param attributeValue
      */
-    public void delete(String nodeName,
-                       String attributeName,
-                       String attributeValue) {
+    public void delete(
+            String nodeName,
+            String attributeName,
+            String attributeValue
+    ) {
         write(
                 "delete nodes //" + nodeName +
                         "[@" + attributeName + "=\"" + attributeValue + "\"]"
@@ -117,12 +123,14 @@ public class BaseXRepository {
      * @param attributeName
      * @param attributeValue
      */
-    public void delete(String parent,
-                       String parentAttributeName,
-                       String parentAttributeValue,
-                       String nodeName,
-                       String attributeName,
-                       String attributeValue) {
+    public void delete(
+            String parent,
+            String parentAttributeName,
+            String parentAttributeValue,
+            String nodeName,
+            String attributeName,
+            String attributeValue
+    ) {
 
         write(
                 "delete nodes //" + parent + "[@" +
@@ -143,13 +151,15 @@ public class BaseXRepository {
      * @param attributeName
      * @param attributeValue
      */
-    public void saveOrUpdate(String parent,
-                             String parentAttributeName,
-                             String parentAttributeValue,
-                             String node,
-                             String nodeName,
-                             String attributeName,
-                             String attributeValue) {
+    public void saveOrUpdate(
+            String parent,
+            String parentAttributeName,
+            String parentAttributeValue,
+            String node,
+            String nodeName,
+            String attributeName,
+            String attributeValue
+    ) {
 
         delete(
                 parent,
@@ -164,6 +174,47 @@ public class BaseXRepository {
                 parentAttributeName,
                 parentAttributeValue,
                 node
+        );
+    }
+
+    /**
+     * @param parentNode
+     * @param parentNodeAttributeName
+     * @param parentNodeAttributeValue
+     * @param nodeName
+     * @return XMLString
+     */
+    public String getAllAsXMLString(
+            String parentNode,
+            String parentNodeAttributeName,
+            String parentNodeAttributeValue,
+            String nodeName
+    ) {
+
+        return read(
+                "for $nd in //" + parentNode + "[@" +
+                        parentNodeAttributeName + "=\"" + parentNodeAttributeValue +
+                        "\"]  return $nd//" + nodeName
+        );
+    }
+
+    /**
+     * @param parentNode
+     * @param parentNodeAttributeName
+     * @param parentNodeAttributeValue
+     * @param nodeName
+     * @return
+     */
+    public String getAllAsData(
+            String parentNode,
+            String parentNodeAttributeName,
+            String parentNodeAttributeValue,
+            String nodeName
+    ) {
+        return read(
+                "for $nd in //" + parentNode + "[@" +
+                        parentNodeAttributeName + "=\"" + parentNodeAttributeValue +
+                        "\"]  return data($nd//" + nodeName + ")"
         );
     }
 }

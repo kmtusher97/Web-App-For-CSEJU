@@ -1,13 +1,15 @@
 package org.ju.cse.cseju.controller.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.clientIO.TextInput;
-import org.ju.cse.cseju.model.syllabus.organizer.CourseTypes;
-import org.ju.cse.cseju.service.syllabus.CourseTypesServices;
+import org.ju.cse.cseju.model.syllabus.organizer.CourseType;
+import org.ju.cse.cseju.service.test.CourseTypeServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kamrul Hasan
@@ -17,7 +19,8 @@ import java.util.ArrayList;
 public class CourseTypeController {
     private static final String SYLLABUS_VIEW_INPUT = "syllabus/input/";
 
-    private CourseTypesServices courseTypesServices = new CourseTypesServices();
+    @Autowired
+    private CourseTypeServices courseTypeServices;
 
 
     /**
@@ -35,14 +38,26 @@ public class CourseTypeController {
         );
 
         TextInput textInput = new TextInput();
-        CourseTypes courseTypes = courseTypesServices.getCourseTypes(syllabusName);
 
-        if (courseTypes.getCourseTypeList() == null) {
-            courseTypes.setCourseTypeList(new ArrayList<>());
+        List<String> courseTypeNames =
+                courseTypeServices.getAllCourseTypeNames(syllabusName);
+
+        if (courseTypeNames == null || courseTypeNames.get(0) == "") {
+            courseTypeNames = new ArrayList<>();
         }
 
-        modelAndViewCourseTypeListPage.addObject("courseTypes", courseTypes);
-        modelAndViewCourseTypeListPage.addObject("newCourseType", textInput);
+        modelAndViewCourseTypeListPage.addObject(
+                "courseTypes",
+                courseTypeNames
+        );
+        modelAndViewCourseTypeListPage.addObject(
+                "newCourseType",
+                textInput
+        );
+        modelAndViewCourseTypeListPage.addObject(
+                "syllabusName",
+                syllabusName
+        );
 
         return modelAndViewCourseTypeListPage;
     }
@@ -60,7 +75,11 @@ public class CourseTypeController {
             @ModelAttribute("newCourseType") TextInput newCourseType,
             @PathVariable("syllabusName") String syllabusName
     ) {
-        courseTypesServices.addCourseType(syllabusName, newCourseType.getText());
+
+        courseTypeServices.addNewCourseType(
+                syllabusName,
+                new CourseType(newCourseType.getText())
+        );
 
         return new ModelAndView("redirect:/courseType/" + syllabusName);
     }
@@ -78,7 +97,10 @@ public class CourseTypeController {
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseTypeName") String courseTypeName
     ) {
-        courseTypesServices.deleteCourseType(syllabusName, courseTypeName);
+        courseTypeServices.deleteCourseTypeByCourseTypeName(
+                syllabusName,
+                courseTypeName
+        );
 
         return new ModelAndView("redirect:/courseType/" + syllabusName);
     }

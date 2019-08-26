@@ -20,7 +20,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="courseType, courseTypeId : ${courseTypes.courseTypeList}">
+        <tr th:each="courseType, courseTypeId : ${courseTypes}">
+
             <td th:text="${courseTypeId.index} + 1">
 
             </td>
@@ -30,7 +31,7 @@
                 <a class=""
                    th:id="'courseTypeEdit' + ${courseTypeId.index}"
                    role="button"
-                   th:href="@{'/course_structure/design/' + ${courseTypes.syllabusName} + '_' + ${courseType}}"
+                   th:href="@{'/courseStructure/design/' + ${syllabusName} + '/' + ${courseType}}"
                    th:text="${courseType}">
                 </a>
             </td>
@@ -39,7 +40,7 @@
                 url: /courseType/{syllabusName}/deleteType/{courseTypeName}-->
                 <a class=""
                    th:id="'courseTypeDelete' + ${courseTypeId.index}"
-                   th:href="@{'/courseType/' + ${courseTypes.syllabusName} + '/deleteType/' + ${courseType}}"
+                   th:href="@{'/courseType/' + ${syllabusName} + '/deleteType/' + ${courseType}}"
                    role="button">Delete</a>
             </td>
         </tbody>
@@ -61,7 +62,7 @@
                     <form class=""
                           id="addCourseTypeForm"
                           method="post"
-                          th:action="@{'/courseType/' + ${courseTypes.syllabusName} + '/saveNewType'}">
+                          th:action="@{'/courseType/' + ${syllabusName} + '/saveNewType'}">
 
                         <div>
                             <input class=""
@@ -73,7 +74,8 @@
 
                         <div>
                             <button class=""
-                                    type="submit" >Create Type</button>
+                                    type="submit">Create Type
+                            </button>
                         </div>
                     </form>
                 </div>

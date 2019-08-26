@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<syllabus>
+    <courseTypes syllabusName="undergrad_2018-2022">
+        <courseType id="1">
+            <courseTypeName>Theory</courseTypeName>
+            <courseStructure>
+                <name>Theory</name>
+                <contentBundles>
+                    <contentBundle>
+                        <selected>1</selected>
+                        <table>
+                            <title>Course Content</title>
+                            <fields>
+                                <field>Title</field>
+                                <field>Description</field>
+                            </fields>
+                            <rows/>
+                        </table>
+                        <textArea contentId="0">
+                            <title>Untitled TextArea</title>
+                            <textBody>Empty Text Body</textBody>
+                        </textArea>
+                    </contentBundle>
+                    <contentBundle>
+                        <selected>0</selected>
+                        <table contentId="0">
+                            <title>Untitled Table</title>
+                            <fields>
+                                <field>Field0</field>
+                            </fields>
+                        </table>
+                        <textArea>
+                            <title>Course Summary</title>
+                            <textBody>Empty Text Body</textBody>
+                        </textArea>
+                    </contentBundle>
+                    <contentBundle>
+                        <selected>0</selected>
+                        <table contentId="0">
+                            <title>Untitled Table</title>
+                            <fields>
+                                <field>Field0</field>
+                            </fields>
+                        </table>
+                        <textArea>
+                            <title>Learning Outcome</title>
+                            <textBody>Empty Text Body</textBody>
+                        </textArea>
+                    </contentBundle>
+                </contentBundles>
+            </courseStructure>
+        </courseType>
+        <courseType id="2">
+            <courseTypeName>Laboratory</courseTypeName>
+        </courseType>
+    </courseTypes>
+    <year id="1">
+        <semester semesterId="1">
+            <courses>
+                <course courseCode="CSE 101">
+                    <courseTitle>Computer Fundamentals</courseTitle>
+                    <courseType>Theory</courseType>
+                    <semesterId>1</semesterId>
+                    <yearId>1</yearId>
+                    <content contentId="1">
+                        <title>Course Summary</title>
+                        <textBody>Empty Text Body</textBody>
+                    </content>
+                    <content contentId="2">
+                        <title>Learning Outcome</title>
+                        <textBody>Empty Text Body</textBody>
+                    </content>
+                    <content contentId="0">
+                        <title>Course Content</title>
+                    </content>
+                </course>
+                <course courseCode="CSE 106">
+                    <courseTitle>Computer Fundamentals</courseTitle>
+                    <courseType>Theory</courseType>
+                    <semesterId>1</semesterId>
+                    <yearId>1</yearId>
+                    <content contentId="1">
+                        <title>Course Summary</title>
+                        <textBody>Empty Text Body</textBody>
+                    </content>
+                    <content contentId="2">
+                        <title>Learning Outcome</title>
+                        <textBody>Empty Text Body</textBody>
+                    </content>
+                    <content contentId="0">
+                        <title>Course Content</title>
+                    </content>
+                </course>
+            </courses>
+        </semester>
+    </year>
+</syllabus>
