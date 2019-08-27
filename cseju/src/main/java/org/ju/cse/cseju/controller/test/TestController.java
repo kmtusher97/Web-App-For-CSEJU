@@ -1,5 +1,6 @@
 package org.ju.cse.cseju.controller.test;
 
+import org.ju.cse.cseju.message.RequestResponse;
 import org.ju.cse.cseju.model.syllabus.organizer.CourseType;
 import org.ju.cse.cseju.repository.basex.BaseXRepository;
 import org.ju.cse.cseju.service.test.CourseTypeServices;
@@ -60,4 +61,30 @@ public class TestController {
     ) {
         return (List<String>) courseTypeServices.getAllCourseTypeNames(syllabusName);
     }
+
+    @GetMapping("/getAllCt/{syllabusName}")
+    public String getAllCourseTypeNames(
+            @PathVariable("syllabusName") String syllabusName
+    ) {
+        String data = baseXRepository.getAllAsXMLString(
+                "courseTypes",
+                "syllabusName",
+                syllabusName,
+                "courseType"
+        );
+        System.err.println(data);
+        return data;
+    }
+
+    /*@GetMapping("/getAllCT/{syllabusName")
+    public RequestResponse getAllCourseTypeNames() {
+        String data = baseXRepository.getAllAsXMLString(
+                "courseTypes",
+                "syllabusName",
+                SYLLABUS_NAME,
+                "courseType"
+        );
+        System.err.println(data);
+        return new RequestResponse("done", null);
+    }*/
 }
