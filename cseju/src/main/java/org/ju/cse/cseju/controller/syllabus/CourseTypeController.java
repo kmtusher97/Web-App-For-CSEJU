@@ -8,58 +8,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * @author Kamrul Hasan
- */
 @Controller
 @RequestMapping(path = "/courseType")
 public class CourseTypeController {
+
     private static final String SYLLABUS_VIEW_INPUT = "syllabus/input/";
 
     @Autowired
     private CourseTypeServices courseTypeServices;
 
 
-    /**
-     * <h3>url: /courseType/{syllabusName}</h3>
-     *
-     * @param syllabusName
-     * @return
-     */
     @GetMapping("/{syllabusName}")
     public ModelAndView getCourseTypes(
             @PathVariable("syllabusName") String syllabusName
     ) {
-        ModelAndView modelAndViewCourseTypeListPage = new ModelAndView(
-                SYLLABUS_VIEW_INPUT + "courseTypePage"
-        );
+        ModelAndView modelCourseTypePage =
+                new ModelAndView(
+                        SYLLABUS_VIEW_INPUT + "courseTypePage"
+                );
 
-        TextInput textInput = new TextInput();
-
-        List<String> courseTypeNames =
-                courseTypeServices.getAllCourseTypeNames(syllabusName);
-
-        if (courseTypeNames == null || courseTypeNames.get(0) == "") {
-            courseTypeNames = new ArrayList<>();
-        }
-
-        modelAndViewCourseTypeListPage.addObject(
-                "courseTypes",
-                courseTypeNames
-        );
-        modelAndViewCourseTypeListPage.addObject(
+        modelCourseTypePage.addObject(syllabusName);
+        modelCourseTypePage.addObject(
                 "newCourseType",
-                textInput
+                new TextInput()
         );
-        modelAndViewCourseTypeListPage.addObject(
-                "syllabusName",
-                syllabusName
-        );
-
-        return modelAndViewCourseTypeListPage;
+        return modelCourseTypePage;
     }
 
 

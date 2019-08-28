@@ -110,4 +110,15 @@ public class CourseTypeServices {
                 courseTypeName
         );
     }
+
+    /**
+     * @param syllabusName
+     * @return CourseTypes as XML String
+     */
+    public String getCourseTypes(String syllabusName) {
+        return baseXRepository.read(
+                "//" + PARENT_NODE + "[@" + PARENT_NODE_ATTRIBUTE_NAME + "=\'" +
+                        syllabusName + "\']"
+        );
+    }
 }
