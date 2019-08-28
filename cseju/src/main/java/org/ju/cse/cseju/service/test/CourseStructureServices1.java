@@ -92,4 +92,20 @@ public class CourseStructureServices1 {
                 )
         );
     }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @return CourseStructure as XML String
+     */
+    public String getCourseStructure(
+            String syllabusName,
+            String courseTypeName
+    ) {
+        return baseXRepository.read(
+                "//" + PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
+                        syllabusName + "\"]//" + PARENT1_NODE + "[@" + PARENT1_NODE_ATTRIBUTE_NAME + "=\"" +
+                        courseTypeName + "\"]/" + NODE_NAME
+        );
+    }
 }

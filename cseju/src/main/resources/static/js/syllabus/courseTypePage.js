@@ -21,10 +21,11 @@ $(document).ready(function() {
                 var cell0 = document.createElement("td");
                 cell0.innerHTML = i + 1;
 
+                var cellData = $('<h6 id="courseType_' + i + '"></h6>').text(courseTypeName);
                 var cell1 = document.createElement("td");
-                cell1.innerHTML = courseTypeName;
+                cellData.appendTo(cell1);
 
-                var cellData = $('<button></button>').text('Edit');
+                cellData = $('<button></button>').text('Edit');
                 cellData.attr('class', '');
                 cellData.attr('id', 'courseTypeEdit_' + i);
                 cellData.attr('onclick', 'openCourseStructureDesigner(' + '\'' + syllabusName + '\', \'' + courseTypeName + '\')');
@@ -79,12 +80,89 @@ $(document).ready(function() {
     });
 })
 
+/*load course structure data*/
+function loadCourseStructureDesignData(syllabusName, courseTypeName) {
+    var loadCourseStructureDataFromXML = function() {
+        $.ajax({
+            type: 'GET',
+            url:  '/courseStructure/Data/' + syllabusName + '/' + courseTypeName,
+            success: function(xmlString) {
+                var xmlData = String(xmlString);
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(xmlData, "text/xml");
+
+                var contentBundles = xmlDoc.getElementsByTagName('contentBundle');
+                for (var i = 0; i < contentBundles.length; i++) {
+                    var selected = xmlDoc.getElementsByTagName('selected')[i].childNodes[0].nodeValue;
+
+                    var row = $('<tr></tr>');
+                    var cell = $('<td></td>')
+
+                    /*TextArea*/
+                    if (selected == 0) {
+                        var contentDiv = $('<div></div>');
+                        contentDiv.attr('class', 'card');
+                        contentDiv.attr('id', 'textArea_' + i);
+
+                        var textAreaTitleInput = $('<input/>');
+                        textAreaTitleInput.attr('class', '');
+                        textAreaTitleInput.attr('id', 'textArea_' + i + 'title');
+                        textAreaTitleInput.attr('type', 'text');
+                        textAreaTitleInput.attr('value', 'Empty');
+
+                        textAreaTitleInput.appendTo(contentDiv);
+
+                        var textAreaTextBody = $('<textArea></textArea>');
+                        textAreaTextBody.attr('class', '');
+                        textAreaTextBody.attr('value', 'Input Here');
+
+                        textAreaTextBody.appendTo(contentDiv);
+
+                        cell.append(contentDiv);
+                        row.append(cell);
+
+                        $('#courseContentTable tbody').append(row);
+                        /*<div class=""
+                             th:id="'textArea_' + ${rowId.index}"
+                             th:style="${contentBundle.selected == 1} ? 'display: none' : 'display: block'">
+
+                            <div class=""
+                                 th:id="'textArea_' + ${rowId.index} + '_field1'">
+
+                                <input class=""
+                                       type="text"
+                                       th:id="'textArea_' + ${rowId.index} + '_field1Name'"
+                                       th:value="${contentBundle.textArea.title}"/>
+                            </div>
+
+                            <div class=""
+                                 th:id="'textArea_' + ${rowId.index} + '_field2Preview'">
+                                <h3>Text Input Here...</h3>
+                            </div>
+                        </div>*/
+                    }
+
+                    //contentDiv.appendTo(cell);
+
+
+                }
+            },
+            error : function(e) {
+                alert("Page Loading Error!!");
+                console.log("Error: ", e);
+            }
+        });
+    }
+
+    loadCourseStructureDataFromXML();
+}
+
 /*open and close course input form designer*/
 function openCourseStructureDesigner(syllabusName, courseTypeName) {
     $('#courseTypesTableDiv').hide();
     $('#courseStructureDiv').show();
 
-    
+    loadCourseStructureDesignData(syllabusName, courseTypeName);
 }
 
 function closeFormDesigner() {

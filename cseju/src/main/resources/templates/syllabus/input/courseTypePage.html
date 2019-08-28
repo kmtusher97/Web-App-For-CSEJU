@@ -81,7 +81,8 @@
     <section>
         <div id="courseStructureDiv" class="card" style="display:none">
             <button class="btn btn-primary"
-                    onclick="closeFormDesigner()">Done</button>
+                    onclick="closeFormDesigner()">Done
+            </button>
             <div class=""
                  id="optionDiv">
 
@@ -100,29 +101,18 @@
                 <span id="statusText2"></span>
             </div>
 
-            <!--<form class=""
+            <form class=""
                   id="courseStructureDesignForm">
 
-                <input class=""
-                       id="courseStructureName"
-                       type="hidden"
-                       th:value="${courseStructure.name}">
-
-                <input class=""
-                       id="databaseName"
-                       type="hidden"
-                       th:value="${courseStructure.databaseName}">
-
-                &lt;!&ndash;Each row of this table is a content for this type of course
-                Add a row means add a new content to Course Structure and delete vice versa&ndash;&gt;
-                <table class=""
-                       id="courseContentTable"
-                       border="1">
+                <!--Each row of this table is a content for this type of course
+                Add a row means add a new content to Course Structure and delete vice versa-->
+                <table class="table"
+                       id="courseContentTable">
 
                     <thead></thead>
                     <tbody>
-                    &lt;!&ndash;for each ContentBundle in the ContentBundleList of the CourseStructure(CourseStructure)&ndash;&gt;
-                    <tr th:each="contentBundle, rowId : ${courseStructure.contentBundleList}">
+                    <!--for each ContentBundle in the ContentBundleList of the CourseStructure(CourseStructure)-->
+                    <!--<tr th:each="contentBundle, rowId : ${courseStructure.contentBundleList}">
 
                         <td>
                             <div class=""
@@ -245,7 +235,7 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                     <tfoot>
                     <tr>
@@ -253,11 +243,11 @@
                             <div class=""
                                  id="addContentRowDiv">
 
-                                &lt;!&ndash;Add a new ContentBundle in the CourseStructure(CourseStructure)
-                                url: /course_structure/add_ContentBundle/{databaseName} &ndash;&gt;
-                                <a type="button"
-                                   th:href="@{'/courseStructure/addContentBundle/' +
-                                        ${syllabusName} + '/' + ${courseType}}">
+                                <!--Add a new ContentBundle in the CourseStructure(CourseStructure)
+                                url: /course_structure/add_ContentBundle/{databaseName} -->
+                                <a type="button">
+                                   <!--th:href="@{'/courseStructure/addContentBundle/' +
+                                        ${syllabusName} + '/' + ${courseType}}">-->
                                     Add +
                                 </a>
                             </div>
@@ -265,7 +255,7 @@
                     </tr>
                     </tfoot>
                 </table>
-            </form>-->
+            </form>
         </div>
     </section>
 </div>
