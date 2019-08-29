@@ -29,7 +29,9 @@ public class TestController {
 
     @GetMapping("/get")
     public String getSyllabus() {
-        return baseXRepository.read("//syllabus");
+        String data = baseXRepository.read("/");
+        System.out.println(data);
+        return data;
     }
 
     @GetMapping("/addNewCourseType/{name}")

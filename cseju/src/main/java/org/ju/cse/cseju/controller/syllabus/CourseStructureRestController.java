@@ -35,7 +35,7 @@ public class CourseStructureRestController {
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseTypeName") String courseTypeName
     ) {
-        courseStructureServices.addContentBundleByCourseType(
+        courseStructureServices.addContentBundle(
                 syllabusName,
                 courseTypeName
         );

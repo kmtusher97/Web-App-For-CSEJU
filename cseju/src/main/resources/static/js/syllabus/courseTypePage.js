@@ -86,6 +86,7 @@ $(document).ready(function () {
                 type: 'GET',
                 url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName + '/add',
                 success: function (result) {
+                    $('#courseContentTable tbody').empty();
                     loadCourseStructureDesignData(syllabusName, courseTypeName);
                 },
                 error: function (e) {
@@ -98,7 +99,7 @@ $(document).ready(function () {
 
 /*load course structure data*/
 function loadCourseStructureDesignData(syllabusName, courseTypeName) {
-    console.log("ok");
+
     var loadCourseStructureDataFromXML = function () {
         $.ajax({
             type: 'GET',
@@ -109,7 +110,7 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
                 var xmlDoc = parser.parseFromString(xmlData, "text/xml");
 
                 var i = 0;
-                var contentBundlesXml = xmlDoc.getElementsByTagName('contentBundle');
+
                 $(xmlString).find('contentBundle').each(function(index){
 
                     var selected = $(this).find('selected').text()

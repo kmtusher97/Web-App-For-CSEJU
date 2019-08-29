@@ -72,7 +72,7 @@ public class CourseStructureController1 {
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseType") String courseType
     ) {
-        courseStructureServices.addContentBundleByCourseType(
+        courseStructureServices.addContentBundle(
                 syllabusName,
                 courseType
         );

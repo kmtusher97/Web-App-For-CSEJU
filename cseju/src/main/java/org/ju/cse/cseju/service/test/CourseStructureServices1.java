@@ -48,7 +48,7 @@ public class CourseStructureServices1 {
      * @param syllabusName
      * @param courseType
      */
-    public void addContentBundleByCourseType(
+    public void addContentBundle(
             String syllabusName,
             String courseType
     ) {
@@ -64,18 +64,13 @@ public class CourseStructureServices1 {
                 contentBundleId
         );
 
-        baseXRepository.saveOrUpdate(
-                PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
-                        syllabusName + "\"]//" + PARENT1_NODE,
-                PARENT1_NODE_ATTRIBUTE_NAME,
-                courseType,
-                jaxbServices.objectToXmlString(contentBundle, false),
-                "contentBundle",
-                "contentBundleId",
-                Integer.toString(contentBundle.getContentBundleId())
+        baseXRepository.write(
+                "insert node " +
+                        jaxbServices.objectToXmlString(contentBundle, false) +
+                        " into " +
+                        "//courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseType + "\"]//courseStructure"
         );
-
-        System.err.println(baseXRepository.read("/"));
     }
 
     /**
@@ -87,12 +82,12 @@ public class CourseStructureServices1 {
             String syllabusName,
             String courseTypeName
     ) {
-        return Integer.parseInt(
-                baseXRepository.read(
-                        "max(//courseTypes[@syllabusName=\"" + syllabusName +
-                                "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle/[@id])"
-                )
+        String result = baseXRepository.read(
+                "max(//courseTypes[@syllabusName=\"" + syllabusName +
+                        "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle/[@id])"
         );
+        if (result == "") return 0;
+        return Integer.parseInt(result);
     }
 
     /**
