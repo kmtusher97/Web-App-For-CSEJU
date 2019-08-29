@@ -41,6 +41,8 @@
                             <title>Untitled Table</title>
                             <fields>
                                 <field>Field0</field>
+                                <field>Field1</field>
+                                <field>Field2</field>
                             </fields>
                         </table>
                         <textArea>
