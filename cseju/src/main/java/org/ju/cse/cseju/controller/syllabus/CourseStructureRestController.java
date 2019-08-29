@@ -28,4 +28,18 @@ public class CourseStructureRestController {
                 courseTypeName
         );
     }
+
+
+    @GetMapping("/{syllabusName}/{courseTypeName}/add")
+    public String addContentBundle(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseTypeName") String courseTypeName
+    ) {
+        courseStructureServices.addContentBundleByCourseType(
+                syllabusName,
+                courseTypeName
+        );
+
+        return "added";
+    }
 }

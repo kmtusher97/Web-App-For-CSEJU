@@ -111,152 +111,23 @@
 
                     <thead></thead>
                     <tbody>
-                    <!--for each ContentBundle in the ContentBundleList of the CourseStructure(CourseStructure)-->
-                    <!--<tr th:each="contentBundle, rowId : ${courseStructure.contentBundleList}">
-
-                        <td>
-                            <div class=""
-                                 th:id="'contentRow_' + ${rowId.index}">
-
-                                <div class=""
-                                     th:id="'contentSelectorDiv_' + ${rowId.index}">
-
-                                    &lt;!&ndash;ContentSelector : 0 for TextArea, 1 for Table&ndash;&gt;
-                                    <select class=""
-                                            th:id="'contentSelector_' + ${rowId.index}"
-                                            th:value="${contentBundle.selected}"
-                                            th:onchange="'changeContentType(' + ${rowId.index} + ')'">
-
-                                        <option th:value="${contentBundle.selected}"
-                                                th:text="${contentBundle.selected == 0} ? 'Text Area' : 'Table'"></option>
-                                        <option th:value="${contentBundle.selected == 0} ? 1 : 0"
-                                                th:text="${contentBundle.selected == 1} ? 'Text Area' : 'Table'"></option>
-                                    </select>
-                                </div>
-
-                                &lt;!&ndash;TextArea Div
-                                Hidden if Table is selected&ndash;&gt;
-                                <div class=""
-                                     th:id="'textArea_' + ${rowId.index}"
-                                     th:style="${contentBundle.selected == 1} ? 'display: none' : 'display: block'">
-
-                                    <div class=""
-                                         th:id="'textArea_' + ${rowId.index} + '_field1'">
-
-                                        <input class=""
-                                               type="text"
-                                               th:id="'textArea_' + ${rowId.index} + '_field1Name'"
-                                               th:value="${contentBundle.textArea.title}"/>
-                                    </div>
-
-                                    <div class=""
-                                         th:id="'textArea_' + ${rowId.index} + '_field2Preview'">
-                                        <h3>Text Input Here...</h3>
-                                    </div>
-                                </div>
-
-                                &lt;!&ndash;Table Div
-                                Hidden if TextArea is selected&ndash;&gt;
-                                <div class=""
-                                     th:id="'table_' + ${rowId.index}"
-                                     th:style="${contentBundle.selected == 0} ? 'display: none' : 'display: block'">
-
-                                    <div class=""
-                                         th:id="'table_' + ${rowId.index} + '_field1'">
-
-                                        <input class=""
-                                               type="text"
-                                               th:id="'table_' + ${rowId.index} + '_field1Name'"
-                                               th:value="${contentBundle.table.title}"/>
-                                    </div>
-
-                                    <div class=""
-                                         th:id="'table_' + ${rowId.index} + '_field2'">
-
-                                        &lt;!&ndash;Table to show the FieldNames of a Table(Content)&ndash;&gt;
-                                        <table class=""
-                                               th:id="'table_' + ${rowId.index} + 'FieldNameTable'">
-
-                                            <tbody>
-                                            <tr>
-                                                &lt;!&ndash;For each FieldName in the Table.Fields&ndash;&gt;
-                                                <td th:each="contentTableFieldName, colId : ${contentBundle.table.fields}">
-
-                                                    <div class=""
-                                                         th:id="'contentTable' + ${rowId.index} + 'FieldNameDiv' + ${colId.index}">
-
-                                                        <div class=""
-                                                             th:id="'contentTable' + ${rowId.index} + 'FieldNameInputDiv' + ${colId.index}">
-
-                                                            <input class=""
-                                                                   type="text"
-                                                                   th:id="'contentTable' + ${rowId.index} + 'FieldName' + ${colId.index}"
-                                                                   th:value="${contentTableFieldName}"/>
-                                                        </div>
-
-                                                        <div class=""
-                                                             th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteDiv' + ${colId.index}">
-
-                                                            &lt;!&ndash;Delete this Field Form the Table(Content)
-                                                            url: /course_structure/{databaseName}/delete_field_/{contentBundleIndex}/{fieldNameId} &ndash;&gt;
-                                                            <a class=""
-                                                               th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteButton' + ${colId.index}"
-                                                               th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/delete_field_/' + ${rowId.index} + '/' + ${colId.index}}">Delete
-                                                                Field</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class=""
-                                                         th:id="'contentTableAddFieldDiv' + ${rowId.index}">
-
-                                                        &lt;!&ndash;Add a new Field in the Table(Content)
-                                                        url: /course_structure/{databaseName}/add_field_/{contentBundleIndex} &ndash;&gt;
-                                                        <a class=""
-                                                           th:id="'contentTableAddFieldButton' + ${rowId.index}"
-                                                           th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/add_field_/' + ${rowId.index}}">Add
-                                                            Field</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class=""
-                                     th:id="'deleteContentRowDiv_' + ${rowId.index}">
-
-                                    &lt;!&ndash;Delete this ContentBundle
-                                    url: /course_structure/delete_contentBundle/{databaseName}/{contentBundleIndex}&ndash;&gt;
-                                    <a type="button"
-                                       th:href="@{'/course_structure/delete_contentBundle/' +
-                                            ${courseStructure.databaseName} + '/' + ${rowId.index}}">Delete</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>-->
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td>
-                            <div class=""
-                                 id="addContentRowDiv">
-
-                                <!--Add a new ContentBundle in the CourseStructure(CourseStructure)
-                                url: /course_structure/add_ContentBundle/{databaseName} -->
-                                <a type="button">
-                                   <!--th:href="@{'/courseStructure/addContentBundle/' +
-                                        ${syllabusName} + '/' + ${courseType}}">-->
-                                    Add +
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    </tfoot>
                 </table>
             </form>
+            <div class="fluid card"
+                 id="addContentRowDiv">
+
+                <p id="courseTypeNameSelected" style="display:none"></p>
+
+                <!--Add a new ContentBundle in the CourseStructure(CourseStructure)
+                url: /course_structure/add_ContentBundle/{databaseName} -->
+                <button class="btn btn-success btn-md"
+                        id="addCourseBundleButton">
+                    Add +
+                </button>
+            </div>
         </div>
+
     </section>
 </div>
 </body>

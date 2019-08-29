@@ -27,6 +27,11 @@ public class TestController {
     @Autowired
     private BaseXRepository baseXRepository;
 
+    @GetMapping("/get")
+    public String getSyllabus() {
+        return baseXRepository.read("//syllabus");
+    }
+
     @GetMapping("/addNewCourseType/{name}")
     public String testAddNewCourseType(
             @PathVariable("name") String name

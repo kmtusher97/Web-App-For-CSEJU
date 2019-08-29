@@ -29,7 +29,7 @@ public class ContentBundle implements Serializable {
         this.selected = selected;
     }
 
-    @XmlAttribute(name = "contentBundleId")
+    @XmlAttribute(name = "id")
     public Integer getContentBundleId() {
         return contentBundleId;
     }

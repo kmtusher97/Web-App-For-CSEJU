@@ -55,11 +55,13 @@ public class CourseStructureServices1 {
         ContentBundle contentBundle = new ContentBundle();
         contentBundle = contentBundle.getInitialContentBundle();
 
+        Integer contentBundleId = 0;
+        if (getCountOfContentBundle(syllabusName, courseType) != 0) {
+            contentBundleId = getNextContentBundleId(syllabusName, courseType) + 1;
+        }
+
         contentBundle.setContentBundleId(
-                getCountOfContentBundle(
-                        syllabusName,
-                        courseType
-                )
+                contentBundleId
         );
 
         baseXRepository.saveOrUpdate(
@@ -71,6 +73,25 @@ public class CourseStructureServices1 {
                 "contentBundle",
                 "contentBundleId",
                 Integer.toString(contentBundle.getContentBundleId())
+        );
+
+        System.err.println(baseXRepository.read("/"));
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @return
+     */
+    private Integer getNextContentBundleId(
+            String syllabusName,
+            String courseTypeName
+    ) {
+        return Integer.parseInt(
+                baseXRepository.read(
+                        "max(//courseTypes[@syllabusName=\"" + syllabusName +
+                                "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle/[@id])"
+                )
         );
     }
 
@@ -85,10 +106,8 @@ public class CourseStructureServices1 {
     ) {
         return Integer.parseInt(
                 baseXRepository.getCountOfElement(
-                        PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
-                                syllabusName + "\"]//" + PARENT1_NODE + "[@" +
-                                PARENT1_NODE_ATTRIBUTE_NAME + "=\"" + courseType + "\"]//" +
-                                "contentBundle"
+                        "count(//courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                                courseType + "\"]//contentBundle)"
                 )
         );
     }

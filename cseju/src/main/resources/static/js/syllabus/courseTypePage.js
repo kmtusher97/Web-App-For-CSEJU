@@ -77,10 +77,28 @@ $(document).ready(function () {
         }
         return true;
     });
+
+
+    $('#addCourseBundleButton').on('click', function() {
+        var courseTypeName = $('#courseTypeNameSelected').text();
+
+        $.ajax({
+                type: 'GET',
+                url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName + '/add',
+                success: function (result) {
+                    loadCourseStructureDesignData(syllabusName, courseTypeName);
+                },
+                error: function (e) {
+                    alert("Page Loading Error!!");
+                    console.log("Error: ", e);
+                }
+        });
+    });
 })
 
 /*load course structure data*/
 function loadCourseStructureDesignData(syllabusName, courseTypeName) {
+    console.log("ok");
     var loadCourseStructureDataFromXML = function () {
         $.ajax({
             type: 'GET',
@@ -90,143 +108,181 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
                 var parser = new DOMParser();
                 var xmlDoc = parser.parseFromString(xmlData, "text/xml");
 
-                var contentBundles = xmlDoc.getElementsByTagName('contentBundle');
-                for (var i = 0; i < contentBundles.length; i++) {
-                    var selected = xmlDoc.getElementsByTagName('selected')[i].childNodes[0].nodeValue;
+                var i = 0;
+                var contentBundlesXml = xmlDoc.getElementsByTagName('contentBundle');
+                $(xmlString).find('contentBundle').each(function(index){
+
+                    var selected = $(this).find('selected').text()
 
                     var row = $('<tr></tr>');
-                    var cell = $('<td></td>')
+                    var cell = $('<td></td>');
 
-                    /*TextArea*/
                     var contentDiv = $('<div></div>');
                     contentDiv.attr('class', 'card');
-                    contentDiv.attr('id', 'textArea_' + i);
+                    contentDiv.attr('id', 'contentDiv_' + i);
+
+                    /*option div*/
+                    var optionDiv = $('<div></div>');
+                    optionDiv.attr('class', 'fluid card');
+
+                    var optionDiv1 = $('<div></div>');
+                    optionDiv1.attr('class', 'fluid');
+
+                    var selector = $('<select></select>');
+                    selector.attr('class', 'btn btn-primary btn-sm float-right');
+                    var selectorOption = $('<option></option>').text('TextArea');
+                    selectorOption.attr('value', '0');
+                    if (selected == 0) {
+                        selectorOption.prop('selected', 'selected');
+                    }
+                    selector.append(selectorOption);
+
+                    selectorOption = $('<option></option>').text('Table');
+                    selectorOption.attr('value', '1');
+                    if (selected == 1) {
+                        selectorOption.prop('selected', 'selected');
+                    }
+                    selector.append(selectorOption);
+
+                    selector.appendTo(optionDiv1);
+                    optionDiv1.appendTo(optionDiv);
+                    optionDiv.appendTo(contentDiv);
+
+
+                    /*TextArea*/
+                    var textAreaDiv = $('<div></div>')
+                    textAreaDiv.attr('class', 'card');
+                    textAreaDiv.attr('id', 'textArea_' + i);
+                    if (selected != 0) {
+                        textAreaDiv.attr('style', 'display:none');
+                    }
 
                     var textAreaTitleInput = $('<input/>');
-                    textAreaTitleInput.attr('class', '');
+                    textAreaTitleInput.attr('class', 'form-control');
                     textAreaTitleInput.attr('id', 'textArea_' + i + 'title');
                     textAreaTitleInput.attr('type', 'text');
-                    textAreaTitleInput.attr('value', 'Untitled TextArea');
+                    if (selected != 0) {
+                        textAreaTitleInput.attr('value', 'Untitled TextArea');
+                    } else {
+                        var textAreaXml = xmlDoc.getElementsByTagName('textArea')[i];
 
-                    textAreaTitleInput.appendTo(contentDiv);
+                        textAreaTitleInput.attr(
+                                'value',
+                                $(textAreaXml).find('title').text()
+                        );
+                    }
 
-                    var textAreaTextBody = $('<textArea></textArea>');
-                    textAreaTextBody.attr('class', '');
-                    textAreaTextBody.attr('value', 'Input Here');
+                    textAreaTitleInput.appendTo(textAreaDiv);
 
-                    textAreaTextBody.appendTo(contentDiv);
+                    var textAreaTextBody = $('<textArea></textArea>').text('Input Here');
+                    textAreaTextBody.attr('class', 'form-control');
 
-                    cell.append(contentDiv);
-                    row.append(cell);
+                    textAreaTextBody.appendTo(textAreaDiv);
+                    textAreaDiv.appendTo(contentDiv);
 
-                    $('#courseContentTable tbody').append(row);
-
-                    contentDiv = $('<div></div>');
-                    contentDiv.attr('class', 'card');
-                    contentDiv.attr('id', 'table_' + i);
+                    /*table*/
+                    var tableDiv = $('<div></div>');
+                    tableDiv.attr('class', 'card');
+                    tableDiv.attr('id', 'table_' + i);
+                    if (selected != 1) {
+                        tableDiv.attr('style', 'display:none');
+                    }
 
                     var tableTitleInput = $('<input/>');
-                    tableTitleInput.attr('class', '');
+                    tableTitleInput.attr('class', 'form-control');
                     tableTitleInput.attr('id', 'table_' + i + 'title');
                     tableTitleInput.attr('type', 'text');
-                    tableTitleInput.attr('value', 'Untitled Table');
 
-                    tableTitleInput.appendTo(contentDiv);
+                    var tableXml = xmlDoc.getElementsByTagName('table')[i];
+                    if (selected != 1) {
+                        tableTitleInput.attr('value', 'Untitled Table');
+                    } else {
+                        tableTitleInput.attr(
+                                'value',
+                                $(tableXml).find('title').text()
+                        );
+                    }
+                    tableTitleInput.appendTo(tableDiv);
 
                     var tableFieldNameTable = $('<table></table>');
-                    tableFieldNameTable.attr('class', '');
+                    tableFieldNameTable.attr('class', 'table table-bordered');
                     tableFieldNameTable.attr('id', 'tableFieldNameTable_' + i);
 
                     var fieldNameRow = $('<tr></tr>');
                     var fieldNames = xmlDoc.getElementsByTagName('fields')[i];
 
-                    for (var j = 0; j < fieldNames.childElementCount; j++) {
-                        var fieldTd = $('<td></td>');
+                    /**table field names */
+                    var j = 0;
+                    var fieldNamesXml = xmlDoc.getElementsByTagName('fields')[i];
 
-                        var fieldNameInput = ('<input/>');
-                        fieldNameInput.attr('class', '');
+                    $(fieldNamesXml).find('field').each(function(index){
+                        var fieldTd = $('<td></td>');
+                        var fieldTdDiv = $('<div></div>');
+                        fieldTdDiv.attr('class', 'fluid');
+
+                        var fieldNameInput = $('<input/>');
+                        fieldNameInput.attr('class', 'form-control');
                         fieldNameInput.attr('id', 'table_' + i + 'fieldName_' + j);
-                        fieldNameInput.attr('value', 'fieldName ' + j);
+
+                        if (selected != 1) {
+                            fieldNameInput.attr('value', 'field ' + j);
+                        } else {
+                            fieldNameInput.attr(
+                                    'value',
+                                    $(this).text()
+                            );
+                        }
 
                         fieldNameInput.appendTo(fieldTd);
 
-                        var deleteFieldNameButton = $('<a></a>').text('Delete');
-                        deleteFieldNameButton.attr('class', '');
+                        var deleteFieldNameButton = $('<a></a>').text('X');
+                        deleteFieldNameButton.attr('class', 'btn btn-sm btn-danger btn-rounded float-right');
                         deleteFieldNameButton.attr('role', 'button');
                         deleteFieldNameButton.attr(
                             'href',
                             '/courseStructure/' + syllabusName + '/' + courseTypeName + '/' + i + '/deleteFieldName/' + j
                         );
 
-                        deleteFieldNameButton.appendTo(fieldTd);
+                        deleteFieldNameButton.appendTo(fieldTdDiv);
+                        fieldTdDiv.appendTo(fieldTd);
                         fieldNameRow.append(fieldTd);
-                    }
+                        j++;
+                    });
 
                     tableFieldNameTable.append(fieldNameRow);
 
-                    console.log('fields ' + fieldNames.childElementCount);
+                    var tableFieldNameTableDiv = $('<div></div>');
+                    tableFieldNameTableDiv.attr('class', 'fluid card');
+                    tableFieldNameTable.appendTo(tableFieldNameTableDiv);
+                    tableFieldNameTableDiv.appendTo(tableDiv);
 
-                    /*
-                    * <div class=""
-                        <div class=""
-                             th:id="'table_' + ${rowId.index} + '_field2'">
+                    tableDiv.appendTo(contentDiv);
 
-                            &lt;!&ndash;Table to show the FieldNames of a Table(Content)&ndash;&gt;
-                            <table class=""
-                                   th:id="'table_' + ${rowId.index} + 'FieldNameTable'">
+                    /*delete content bundle*/
+                    var deleteContentDiv = $('<div></div>');
+                    deleteContentDiv.attr('class', 'fluid');
 
-                                <tbody>
-                                <tr>
-                                    &lt;!&ndash;For each FieldName in the Table.Fields&ndash;&gt;
-                                    <td th:each="contentTableFieldName, colId : ${contentBundle.table.fields}">
+                    var deleteContentDiv1 = $('<div></div>');
+                    deleteContentDiv1.attr('class', 'fluid');
 
-                                        <div class=""
-                                             th:id="'contentTable' + ${rowId.index} + 'FieldNameDiv' + ${colId.index}">
+                    var deleteContentButton = $('<a></a>').text('Delete');
+                    deleteContentButton.attr('class', 'btn btn-danger btn-sm float-left');
+                    deleteContentButton.attr('role', 'button');
+                    deleteContentButton.attr(
+                            'href',
+                            '/courseStructure/' + syllabusName + '/' + courseTypeName + '/' + i
+                    );
+                    deleteContentButton.appendTo(deleteContentDiv1);
+                    deleteContentDiv1.appendTo(deleteContentDiv)
+                    deleteContentDiv.appendTo(contentDiv);
 
-                                            <div class=""
-                                                 th:id="'contentTable' + ${rowId.index} + 'FieldNameInputDiv' + ${colId.index}">
+                    cell.append(contentDiv);
+                    row.append(cell);
 
-                                                <input class=""
-                                                       type="text"
-                                                       th:id="'contentTable' + ${rowId.index} + 'FieldName' + ${colId.index}"
-                                                       th:value="${contentTableFieldName}"/>
-                                            </div>
+                    $('#courseContentTable tbody').append(row);
 
-                                            <div class=""
-                                                 th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteDiv' + ${colId.index}">
-
-                                                &lt;!&ndash;Delete this Field Form the Table(Content)
-                                                url: /course_structure/{databaseName}/delete_field_/{contentBundleIndex}/{fieldNameId} &ndash;&gt;
-                                                <a class=""
-                                                   th:id="'contentTable' + ${rowId.index} + 'FieldNameDeleteButton' + ${colId.index}"
-                                                   th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/delete_field_/' + ${rowId.index} + '/' + ${colId.index}}">Delete
-                                                    Field</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class=""
-                                             th:id="'contentTableAddFieldDiv' + ${rowId.index}">
-
-                                            &lt;!&ndash;Add a new Field in the Table(Content)
-                                            url: /course_structure/{databaseName}/add_field_/{contentBundleIndex} &ndash;&gt;
-                                            <a class=""
-                                               th:id="'contentTableAddFieldButton' + ${rowId.index}"
-                                               th:href="@{'/course_structure/' + ${courseStructure.databaseName} + '/add_field_/' + ${rowId.index}}">Add
-                                                Field</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-*/
-
-                    //contentDiv.appendTo(cell);
-
-
-                }
+                    i++;
+                });
             },
             error: function (e) {
                 alert("Page Loading Error!!");
@@ -239,15 +295,19 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
 }
 
 /*open and close course input form designer*/
-function openCourseStructureDesigner(syllabusName, courseTypeName) {
+var openCourseStructureDesigner = function(syllabusName, courseTypeName) {
     $('#courseTypesTableDiv').hide();
     $('#courseStructureDiv').show();
 
+    $('#courseTypeNameSelected').text(courseTypeName);
+
     $('#courseContentTable tbody').empty();
     loadCourseStructureDesignData(syllabusName, courseTypeName);
-}
+};
 
-function closeFormDesigner() {
+var closeFormDesigner = function() {
     $('#courseTypesTableDiv').show();
     $('#courseStructureDiv').hide();
 };
+
+
