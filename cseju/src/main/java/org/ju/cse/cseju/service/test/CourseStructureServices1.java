@@ -122,4 +122,15 @@ public class CourseStructureServices1 {
                         courseTypeName + "\"]/" + NODE_NAME
         );
     }
+
+    public void deleteContentBundle(
+            String syllabusName,
+            String courseTypeName,
+            Integer id
+    ) {
+        baseXRepository.write(
+                "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]//contentBundle[@id=\"" + id + "\"]"
+        );
+    }
 }

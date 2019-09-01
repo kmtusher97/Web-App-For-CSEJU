@@ -79,6 +79,7 @@ $(document).ready(function () {
     });
 
 
+    /*add new contentBundle*/
     $('#addCourseBundleButton').on('click', function() {
         var courseTypeName = $('#courseTypeNameSelected').text();
 
@@ -98,7 +99,7 @@ $(document).ready(function () {
 })
 
 /*load course structure data*/
-function loadCourseStructureDesignData(syllabusName, courseTypeName) {
+var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
 
     var loadCourseStructureDataFromXML = function () {
         $.ajax({
@@ -120,7 +121,7 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
 
                     var contentDiv = $('<div></div>');
                     contentDiv.attr('class', 'card');
-                    contentDiv.attr('id', 'contentDiv_' + i);
+                    contentDiv.attr('id', 'contentDiv_' + $(this).attr('id'));
 
                     /*option div*/
                     var optionDiv = $('<div></div>');
@@ -266,13 +267,15 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
                     var deleteContentDiv1 = $('<div></div>');
                     deleteContentDiv1.attr('class', 'fluid');
 
-                    var deleteContentButton = $('<a></a>').text('Delete');
+                    var deleteContentButton = $('<button></button>').text('Delete');
                     deleteContentButton.attr('class', 'btn btn-danger btn-sm float-left');
-                    deleteContentButton.attr('role', 'button');
+                    deleteContentButton.attr('id', 'contentDeleteButton_' + i);
                     deleteContentButton.attr(
-                            'href',
-                            '/courseStructure/' + syllabusName + '/' + courseTypeName + '/' + i
+                            'onclick',
+                            'deleteContentBundle("'+ syllabusName + '", "' + courseTypeName +
+                            '", "' + $(this).attr('id') +'")'
                     );
+
                     deleteContentButton.appendTo(deleteContentDiv1);
                     deleteContentDiv1.appendTo(deleteContentDiv)
                     deleteContentDiv.appendTo(contentDiv);
@@ -290,10 +293,10 @@ function loadCourseStructureDesignData(syllabusName, courseTypeName) {
                 console.log("Error: ", e);
             }
         });
-    }
+    };
 
     loadCourseStructureDataFromXML();
-}
+};
 
 /*open and close course input form designer*/
 var openCourseStructureDesigner = function(syllabusName, courseTypeName) {
@@ -311,4 +314,18 @@ var closeFormDesigner = function() {
     $('#courseStructureDiv').hide();
 };
 
-
+/*delete contentBundle by id*/
+var deleteContentBundle = function(syllabusName, courseTypeName, id) {
+    $.ajax({
+            type: 'GET',
+            url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName + '/deleteContentBundle/' + id,
+            success: function (result) {
+                 $('#courseContentTable tbody').empty();
+                 loadCourseStructureDesignData(syllabusName, courseTypeName);
+            },
+            error: function (e) {
+                alert("Page Loading Error!!");
+                console.log("Error: ", e);
+            }
+    });
+};

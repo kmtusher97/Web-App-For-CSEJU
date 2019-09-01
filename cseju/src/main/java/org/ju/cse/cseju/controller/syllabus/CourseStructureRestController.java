@@ -42,4 +42,20 @@ public class CourseStructureRestController {
 
         return "added";
     }
+
+
+    @GetMapping("/{syllabusName}/{courseTypeName}/deleteContentBundle/{contentBundleId}")
+    public String deleteContentBundle(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseTypeName") String courseTypeName,
+            @PathVariable("contentBundleId") Integer id
+    ) {
+        courseStructureServices.deleteContentBundle(
+                syllabusName,
+                courseTypeName,
+                id
+        );
+
+        return "deleted";
+    }
 }
