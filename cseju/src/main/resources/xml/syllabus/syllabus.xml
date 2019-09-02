@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <syllabus>
-    <courseTypes syllabusName="undergrad_2018-2022"/>
+    <courseTypes syllabusName="undergrad_2018-2022">
+        <courseType name="Theory">
+            <courseStructure/>
+        </courseType>
+        <courseType name="Laboratory">
+            <courseStructure/>
+        </courseType>
+    </courseTypes>
 </syllabus>

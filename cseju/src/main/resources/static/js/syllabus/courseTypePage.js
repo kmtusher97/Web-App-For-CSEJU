@@ -3,6 +3,9 @@ $(document).ready(function () {
     var syllabusName = $('#syllabusName').text();
 
     var loadDataFromXML = function () {
+        $('#courseTypesTableDiv').show();
+        $('#courseStructureDiv').hide();
+
         $.ajax({
             type: 'GET',
             url: '/courseType/Data/' + syllabusName,
@@ -24,10 +27,14 @@ $(document).ready(function () {
                     var cell1 = document.createElement("td");
                     cellData.appendTo(cell1);
 
-                    cellData = $('<button></button>').text('Edit');
+                    cellData = $('<button>Edit</button>').click(
+                            {syllabusName: syllabusName, courseTypeName: courseTypeName},
+                            function(event) {
+                                openCourseStructureDesigner(event.data.syllabusName, event.data.courseTypeName);
+                            }
+                    );
                     cellData.attr('class', '');
                     cellData.attr('id', 'courseTypeEdit_' + i);
-                    cellData.attr('onclick', 'openCourseStructureDesigner(' + '\'' + syllabusName + '\', \'' + courseTypeName + '\')');
 
                     var cell2 = document.createElement("td");
                     cellData.appendTo(cell2);
@@ -78,6 +85,244 @@ $(document).ready(function () {
         return true;
     });
 
+    /*open course input form designer*/
+    var openCourseStructureDesigner = function(syllabusName, courseTypeName) {
+        $('#courseTypesTableDiv').hide();
+        $('#courseStructureDiv').show();
+
+        $('#courseTypeNameSelected').text(courseTypeName);
+
+        $('#courseContentTable tbody').empty();
+        loadCourseStructureDesignData(syllabusName, courseTypeName);
+    };
+
+    /*close course input form designer*/
+    $('#closeFormDesignerButton').on('click', function() {
+        $('#courseTypesTableDiv').show();
+        $('#courseStructureDiv').hide();
+    });
+
+    /*load course structure data*/
+    var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
+
+        var loadCourseStructureDataFromXML = function () {
+            $.ajax({
+                type: 'GET',
+                url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName,
+                success: function (xmlString) {
+                    var xmlData = String(xmlString);
+                    var parser = new DOMParser();
+                    var xmlDoc = parser.parseFromString(xmlData, "text/xml");
+
+                    var i = 0;
+
+                    $(xmlString).find('contentBundle').each(function(index){
+
+                        var selected = $(this).find('selected').text()
+
+                        var row = $('<tr></tr>');
+                        var cell = $('<td></td>');
+
+                        var contentDiv = $('<div></div>');
+                        contentDiv.attr('class', 'card');
+                        contentDiv.attr('id', 'contentDiv_' + $(this).attr('id'));
+
+                        /*option div*/
+                        var optionDiv = $('<div></div>');
+                        optionDiv.attr('class', 'fluid card');
+
+                        var optionDiv1 = $('<div></div>');
+                        optionDiv1.attr('class', 'fluid');
+
+                        var selector = $('<select></select>');
+                        selector.attr('class', 'btn btn-primary btn-sm float-right');
+                        var selectorOption = $('<option></option>').text('TextArea');
+                        selectorOption.attr('value', '0');
+                        if (selected == 0) {
+                            selectorOption.prop('selected', 'selected');
+                        }
+                        selector.append(selectorOption);
+
+                        selectorOption = $('<option></option>').text('Table');
+                        selectorOption.attr('value', '1');
+                        if (selected == 1) {
+                            selectorOption.prop('selected', 'selected');
+                        }
+                        selector.append(selectorOption);
+
+                        selector.appendTo(optionDiv1);
+                        optionDiv1.appendTo(optionDiv);
+                        optionDiv.appendTo(contentDiv);
+
+
+                        /*TextArea*/
+                        var textAreaDiv = $('<div></div>')
+                        textAreaDiv.attr('class', 'card');
+                        textAreaDiv.attr('id', 'textArea_' + i);
+                        if (selected != 0) {
+                            textAreaDiv.attr('style', 'display:none');
+                        }
+
+                        var textAreaTitleInput = $('<input/>');
+                        textAreaTitleInput.attr('class', 'form-control');
+                        textAreaTitleInput.attr('id', 'textArea_' + i + 'title');
+                        textAreaTitleInput.attr('type', 'text');
+                        if (selected != 0) {
+                            textAreaTitleInput.attr('value', 'Untitled TextArea');
+                        } else {
+                            var textAreaXml = xmlDoc.getElementsByTagName('textArea')[i];
+
+                            textAreaTitleInput.attr(
+                                    'value',
+                                    $(textAreaXml).find('title').text()
+                            );
+                        }
+
+                        textAreaTitleInput.appendTo(textAreaDiv);
+
+                        var textAreaTextBody = $('<textArea></textArea>').text('Input Here');
+                        textAreaTextBody.attr('class', 'form-control');
+
+                        textAreaTextBody.appendTo(textAreaDiv);
+                        textAreaDiv.appendTo(contentDiv);
+
+                        /*table*/
+                        var tableDiv = $('<div></div>');
+                        tableDiv.attr('class', 'card');
+                        tableDiv.attr('id', 'table_' + i);
+                        if (selected != 1) {
+                            tableDiv.attr('style', 'display:none');
+                        }
+
+                        var tableTitleInput = $('<input/>');
+                        tableTitleInput.attr('class', 'form-control');
+                        tableTitleInput.attr('id', 'table_' + i + 'title');
+                        tableTitleInput.attr('type', 'text');
+
+                        var tableXml = xmlDoc.getElementsByTagName('table')[i];
+                        if (selected != 1) {
+                            tableTitleInput.attr('value', 'Untitled Table');
+                        } else {
+                            tableTitleInput.attr(
+                                    'value',
+                                    $(tableXml).find('title').text()
+                            );
+                        }
+                        tableTitleInput.appendTo(tableDiv);
+
+                        var tableFieldNameTable = $('<table></table>');
+                        tableFieldNameTable.attr('class', 'table table-bordered');
+                        tableFieldNameTable.attr('id', 'tableFieldNameTable_' + i);
+
+                        var fieldNameRow = $('<tr></tr>');
+                        var fieldNames = xmlDoc.getElementsByTagName('fields')[i];
+
+                        /**table field names */
+                        var j = 0;
+                        var fieldNamesXml = xmlDoc.getElementsByTagName('fields')[i];
+
+                        $(fieldNamesXml).find('field').each(function(index){
+                            var fieldTd = $('<td></td>');
+                            var fieldTdDiv = $('<div></div>');
+                            fieldTdDiv.attr('class', 'fluid');
+
+                            var fieldNameInput = $('<input/>');
+                            fieldNameInput.attr('class', 'form-control');
+                            fieldNameInput.attr('id', 'table_' + i + 'fieldName_' + j);
+
+                            if (selected != 1) {
+                                fieldNameInput.attr('value', 'field ' + j);
+                            } else {
+                                fieldNameInput.attr(
+                                        'value',
+                                        $(this).text()
+                                );
+                            }
+
+                            fieldNameInput.appendTo(fieldTd);
+
+                            var deleteFieldNameButton = $('<a></a>').text('X');
+                            deleteFieldNameButton.attr('class', 'btn btn-sm btn-danger btn-rounded float-right');
+                            deleteFieldNameButton.attr('role', 'button');
+                            deleteFieldNameButton.attr(
+                                'href',
+                                '/courseStructure/' + syllabusName + '/' + courseTypeName + '/' + i + '/deleteFieldName/' + j
+                            );
+
+                            deleteFieldNameButton.appendTo(fieldTdDiv);
+                            fieldTdDiv.appendTo(fieldTd);
+                            fieldNameRow.append(fieldTd);
+                            j++;
+                        });
+
+                        tableFieldNameTable.append(fieldNameRow);
+
+                        var tableFieldNameTableDiv = $('<div></div>');
+                        tableFieldNameTableDiv.attr('class', 'fluid card');
+                        tableFieldNameTable.appendTo(tableFieldNameTableDiv);
+                        tableFieldNameTableDiv.appendTo(tableDiv);
+
+                        tableDiv.appendTo(contentDiv);
+
+                        /*delete content bundle*/
+                        var deleteContentDiv = $('<div></div>');
+                        deleteContentDiv.attr('class', 'fluid');
+
+                        var deleteContentDiv1 = $('<div></div>');
+                        deleteContentDiv1.attr('class', 'fluid');
+
+                        var deleteContentButton = $('<button>Delete</button>').on(
+                            'click',
+                            {syllabusName: syllabusName, courseTypeName: courseTypeName, id: $(this).attr('id')},
+                            function(event) {
+                                $.ajax({
+                                        type: 'GET',
+                                        url: '/courseStructure/Data/' + event.data.syllabusName + '/' +
+                                                event.data.courseTypeName + '/deleteContentBundle/' + event.data.id,
+                                        success: function (result) {
+
+                                        },
+                                        error: function (e) {
+                                            alert("Page Loading Error!!");
+                                            console.log("Error: ", e);
+                                        }
+                                });
+                                openCourseStructureDesigner(
+                                        event.data.syllabusName,
+                                        event.data.courseTypeName
+                                );
+                            }
+                        );
+                        deleteContentButton.attr('class', 'btn btn-danger btn-sm float-left');
+                        deleteContentButton.attr('id', 'contentDeleteButton_' + i);
+                        /*deleteContentButton.attr(
+                                'onclick',
+                                'deleteContentBundle("'+ syllabusName + '", "' + courseTypeName +
+                                '", "' + $(this).attr('id') +'")'
+                        );*/
+
+                        deleteContentButton.appendTo(deleteContentDiv1);
+                        deleteContentDiv1.appendTo(deleteContentDiv)
+                        deleteContentDiv.appendTo(contentDiv);
+
+                        cell.append(contentDiv);
+                        row.append(cell);
+
+                        $('#courseContentTable tbody').append(row);
+
+                        i++;
+                    });
+                },
+                error: function (e) {
+                    alert("Page Loading Error!!");
+                    console.log("Error: ", e);
+                }
+            });
+        };
+
+        loadCourseStructureDataFromXML();
+    };
+
 
     /*add new contentBundle*/
     $('#addCourseBundleButton').on('click', function() {
@@ -98,234 +343,4 @@ $(document).ready(function () {
     });
 })
 
-/*load course structure data*/
-var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
 
-    var loadCourseStructureDataFromXML = function () {
-        $.ajax({
-            type: 'GET',
-            url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName,
-            success: function (xmlString) {
-                var xmlData = String(xmlString);
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(xmlData, "text/xml");
-
-                var i = 0;
-
-                $(xmlString).find('contentBundle').each(function(index){
-
-                    var selected = $(this).find('selected').text()
-
-                    var row = $('<tr></tr>');
-                    var cell = $('<td></td>');
-
-                    var contentDiv = $('<div></div>');
-                    contentDiv.attr('class', 'card');
-                    contentDiv.attr('id', 'contentDiv_' + $(this).attr('id'));
-
-                    /*option div*/
-                    var optionDiv = $('<div></div>');
-                    optionDiv.attr('class', 'fluid card');
-
-                    var optionDiv1 = $('<div></div>');
-                    optionDiv1.attr('class', 'fluid');
-
-                    var selector = $('<select></select>');
-                    selector.attr('class', 'btn btn-primary btn-sm float-right');
-                    var selectorOption = $('<option></option>').text('TextArea');
-                    selectorOption.attr('value', '0');
-                    if (selected == 0) {
-                        selectorOption.prop('selected', 'selected');
-                    }
-                    selector.append(selectorOption);
-
-                    selectorOption = $('<option></option>').text('Table');
-                    selectorOption.attr('value', '1');
-                    if (selected == 1) {
-                        selectorOption.prop('selected', 'selected');
-                    }
-                    selector.append(selectorOption);
-
-                    selector.appendTo(optionDiv1);
-                    optionDiv1.appendTo(optionDiv);
-                    optionDiv.appendTo(contentDiv);
-
-
-                    /*TextArea*/
-                    var textAreaDiv = $('<div></div>')
-                    textAreaDiv.attr('class', 'card');
-                    textAreaDiv.attr('id', 'textArea_' + i);
-                    if (selected != 0) {
-                        textAreaDiv.attr('style', 'display:none');
-                    }
-
-                    var textAreaTitleInput = $('<input/>');
-                    textAreaTitleInput.attr('class', 'form-control');
-                    textAreaTitleInput.attr('id', 'textArea_' + i + 'title');
-                    textAreaTitleInput.attr('type', 'text');
-                    if (selected != 0) {
-                        textAreaTitleInput.attr('value', 'Untitled TextArea');
-                    } else {
-                        var textAreaXml = xmlDoc.getElementsByTagName('textArea')[i];
-
-                        textAreaTitleInput.attr(
-                                'value',
-                                $(textAreaXml).find('title').text()
-                        );
-                    }
-
-                    textAreaTitleInput.appendTo(textAreaDiv);
-
-                    var textAreaTextBody = $('<textArea></textArea>').text('Input Here');
-                    textAreaTextBody.attr('class', 'form-control');
-
-                    textAreaTextBody.appendTo(textAreaDiv);
-                    textAreaDiv.appendTo(contentDiv);
-
-                    /*table*/
-                    var tableDiv = $('<div></div>');
-                    tableDiv.attr('class', 'card');
-                    tableDiv.attr('id', 'table_' + i);
-                    if (selected != 1) {
-                        tableDiv.attr('style', 'display:none');
-                    }
-
-                    var tableTitleInput = $('<input/>');
-                    tableTitleInput.attr('class', 'form-control');
-                    tableTitleInput.attr('id', 'table_' + i + 'title');
-                    tableTitleInput.attr('type', 'text');
-
-                    var tableXml = xmlDoc.getElementsByTagName('table')[i];
-                    if (selected != 1) {
-                        tableTitleInput.attr('value', 'Untitled Table');
-                    } else {
-                        tableTitleInput.attr(
-                                'value',
-                                $(tableXml).find('title').text()
-                        );
-                    }
-                    tableTitleInput.appendTo(tableDiv);
-
-                    var tableFieldNameTable = $('<table></table>');
-                    tableFieldNameTable.attr('class', 'table table-bordered');
-                    tableFieldNameTable.attr('id', 'tableFieldNameTable_' + i);
-
-                    var fieldNameRow = $('<tr></tr>');
-                    var fieldNames = xmlDoc.getElementsByTagName('fields')[i];
-
-                    /**table field names */
-                    var j = 0;
-                    var fieldNamesXml = xmlDoc.getElementsByTagName('fields')[i];
-
-                    $(fieldNamesXml).find('field').each(function(index){
-                        var fieldTd = $('<td></td>');
-                        var fieldTdDiv = $('<div></div>');
-                        fieldTdDiv.attr('class', 'fluid');
-
-                        var fieldNameInput = $('<input/>');
-                        fieldNameInput.attr('class', 'form-control');
-                        fieldNameInput.attr('id', 'table_' + i + 'fieldName_' + j);
-
-                        if (selected != 1) {
-                            fieldNameInput.attr('value', 'field ' + j);
-                        } else {
-                            fieldNameInput.attr(
-                                    'value',
-                                    $(this).text()
-                            );
-                        }
-
-                        fieldNameInput.appendTo(fieldTd);
-
-                        var deleteFieldNameButton = $('<a></a>').text('X');
-                        deleteFieldNameButton.attr('class', 'btn btn-sm btn-danger btn-rounded float-right');
-                        deleteFieldNameButton.attr('role', 'button');
-                        deleteFieldNameButton.attr(
-                            'href',
-                            '/courseStructure/' + syllabusName + '/' + courseTypeName + '/' + i + '/deleteFieldName/' + j
-                        );
-
-                        deleteFieldNameButton.appendTo(fieldTdDiv);
-                        fieldTdDiv.appendTo(fieldTd);
-                        fieldNameRow.append(fieldTd);
-                        j++;
-                    });
-
-                    tableFieldNameTable.append(fieldNameRow);
-
-                    var tableFieldNameTableDiv = $('<div></div>');
-                    tableFieldNameTableDiv.attr('class', 'fluid card');
-                    tableFieldNameTable.appendTo(tableFieldNameTableDiv);
-                    tableFieldNameTableDiv.appendTo(tableDiv);
-
-                    tableDiv.appendTo(contentDiv);
-
-                    /*delete content bundle*/
-                    var deleteContentDiv = $('<div></div>');
-                    deleteContentDiv.attr('class', 'fluid');
-
-                    var deleteContentDiv1 = $('<div></div>');
-                    deleteContentDiv1.attr('class', 'fluid');
-
-                    var deleteContentButton = $('<button></button>').text('Delete');
-                    deleteContentButton.attr('class', 'btn btn-danger btn-sm float-left');
-                    deleteContentButton.attr('id', 'contentDeleteButton_' + i);
-                    deleteContentButton.attr(
-                            'onclick',
-                            'deleteContentBundle("'+ syllabusName + '", "' + courseTypeName +
-                            '", "' + $(this).attr('id') +'")'
-                    );
-
-                    deleteContentButton.appendTo(deleteContentDiv1);
-                    deleteContentDiv1.appendTo(deleteContentDiv)
-                    deleteContentDiv.appendTo(contentDiv);
-
-                    cell.append(contentDiv);
-                    row.append(cell);
-
-                    $('#courseContentTable tbody').append(row);
-
-                    i++;
-                });
-            },
-            error: function (e) {
-                alert("Page Loading Error!!");
-                console.log("Error: ", e);
-            }
-        });
-    };
-
-    loadCourseStructureDataFromXML();
-};
-
-/*open and close course input form designer*/
-var openCourseStructureDesigner = function(syllabusName, courseTypeName) {
-    $('#courseTypesTableDiv').hide();
-    $('#courseStructureDiv').show();
-
-    $('#courseTypeNameSelected').text(courseTypeName);
-
-    $('#courseContentTable tbody').empty();
-    loadCourseStructureDesignData(syllabusName, courseTypeName);
-};
-
-var closeFormDesigner = function() {
-    $('#courseTypesTableDiv').show();
-    $('#courseStructureDiv').hide();
-};
-
-/*delete contentBundle by id*/
-var deleteContentBundle = function(syllabusName, courseTypeName, id) {
-    $.ajax({
-            type: 'GET',
-            url: '/courseStructure/Data/' + syllabusName + '/' + courseTypeName + '/deleteContentBundle/' + id,
-            success: function (result) {
-                 $('#courseContentTable tbody').empty();
-                 loadCourseStructureDesignData(syllabusName, courseTypeName);
-            },
-            error: function (e) {
-                alert("Page Loading Error!!");
-                console.log("Error: ", e);
-            }
-    });
-};
