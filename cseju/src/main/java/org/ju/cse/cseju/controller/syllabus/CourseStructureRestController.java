@@ -58,4 +58,38 @@ public class CourseStructureRestController {
 
         return "deleted";
     }
+
+
+    @GetMapping("/{syllabusName}/{courseTypeName}/addField/{contentBundleId}")
+    public String addFieldInTableContent(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseTypeName") String courseTypeName,
+            @PathVariable("contentBundleId") Integer id
+    ) {
+        courseStructureServices.addFieldInTableContent(
+                syllabusName,
+                courseTypeName,
+                id
+
+        );
+        return "fieldAdded";
+    }
+
+
+    @GetMapping("/{syllabusName}/{courseTypeName}/deleteField/{contentBundleId}/{fieldId}")
+    public String deleteFieldNameFromTableContent(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseTypeName") String courseTypeName,
+            @PathVariable("contentBundleId") Integer contentBundleId,
+            @PathVariable("fieldId") Integer fieldId
+    ) {
+        courseStructureServices.deleteFieldNameFromTableContent(
+                syllabusName,
+                courseTypeName,
+                contentBundleId,
+                fieldId
+        );
+
+        return "fieldDeleted";
+    }
 }

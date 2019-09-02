@@ -66,6 +66,13 @@
       <version>4.3.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap-glyphicons -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap-glyphicons</artifactId>
+      <version>bdd2cbfba0</version>
+    </dependency>
+
     <!--WebJars-->
 
     <dependency>

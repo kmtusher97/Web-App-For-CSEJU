@@ -123,6 +123,11 @@ public class CourseStructureServices1 {
         );
     }
 
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param id
+     */
     public void deleteContentBundle(
             String syllabusName,
             String courseTypeName,
@@ -131,6 +136,40 @@ public class CourseStructureServices1 {
         baseXRepository.write(
                 "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
                         courseTypeName + "\"]//contentBundle[@id=\"" + id + "\"]"
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param id
+     */
+    public void addFieldInTableContent(
+            String syllabusName,
+            String courseTypeName,
+            Integer id
+    ) {
+        baseXRepository.write(
+                "insert node <field>New Field</field> into //courseTypes[@syllabusName=\"" + syllabusName +
+                        "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle[@id=\"" + id + "\"]//fields"
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param contentBundleId
+     * @param fieldId
+     */
+    public void deleteFieldNameFromTableContent(
+            String syllabusName,
+            String courseTypeName,
+            Integer contentBundleId,
+            Integer fieldId
+    ) {
+        baseXRepository.write(
+                "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]//contentBundle[@id=\"" + contentBundleId + "\"]//fields/field[" + fieldId + "]"
         );
     }
 }
