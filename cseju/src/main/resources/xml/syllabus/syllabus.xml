@@ -1,27 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <syllabus>
-    <courseTypes syllabusName="undergrad_2018-2022">
-        <courseType name="Theory">
-            <courseStructure>
-                <contentBundle id="1">
-                    <selected>1</selected>
-                    <table>
-                        <title>Course Content</title>
-                        <fields>
-                            <field>Title</field>
-                            <field>Description</field>
-                        </fields>
-                        <rows/>
-                    </table>
-                    <textArea contentId="0">
-                        <title>Untitled TextArea</title>
-                        <textBody>Empty Text Body</textBody>
-                    </textArea>
-                </contentBundle>
-            </courseStructure>
-        </courseType>
-        <courseType name="Laboratory">
-            <courseStructure/>
-        </courseType>
-    </courseTypes>
+    <courseTypes syllabusName="undergrad_2018-2022"/>
 </syllabus>

@@ -3,7 +3,6 @@ $.hiddenSection2 = new Object();
 
 $(document).ready(function () {
 
-
     var syllabusName = $('#syllabusName').text();
 
     var loadDataFromXML = function () {
@@ -65,11 +64,6 @@ $(document).ready(function () {
 
     loadDataFromXML();
 
-    /*to add new course */
-    $("#addCourseType").click(function () {
-        $("#addTypeFormDivRow").show();
-    });
-
     $("#addCourseTypeForm").submit(function () {
         var newCourseType = $("#newCourseTypeInput").val();
         for (var i = 0; i < $("#courseTypesTable tbody tr").length; i++) {
@@ -87,14 +81,19 @@ $(document).ready(function () {
         }
         return true;
     });
-
 })
 
+
+/*to add new course */
+var addCourseType = function () {
+    $('#addTypeFormDivRow').show();
+};
 
 /*open course input form designer*/
 var openDesigner = function(courseTypeName) {
     $('#sec1').replaceWith(hiddenSection2);
     $('#courseTypeNameSelected').text(courseTypeName);
+    $('#courseStructureDesignForm').attr('onchange', 'postFormData(\'' + courseTypeName + '\')');
     $('#courseContentTable tbody').empty();
     loadCourseStructureDesignData($('#syllabusName').text(), courseTypeName);
 };
@@ -109,7 +108,6 @@ var closeDesigner = function() {
 var addContentBundle = function() {
     var syllabusName = $('#syllabusName').text();
     var courseTypeName = $('#courseTypeNameSelected').text();
-    console.log(syllabusName + ', ' + courseTypeName);
 
     $.ajax({
             type: 'GET',
@@ -147,7 +145,7 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                 var cell = $('<td></td>');
 
                 var contentDiv = $('<div></div>');
-                contentDiv.attr('class', 'card');
+                contentDiv.attr('class', 'fluid card');
                 contentDiv.attr('id', 'contentDiv_' + $(this).attr('id'));
 
                 /*option div*/
@@ -197,7 +195,7 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
 
                 /*TextArea*/
                 var textAreaDiv = $('<div></div>')
-                textAreaDiv.attr('class', 'card');
+                textAreaDiv.attr('class', 'fluid');
                 textAreaDiv.attr('id', 'textArea_' + i);
                 if (selected != 0) {
                     textAreaDiv.attr('style', 'display:none');
@@ -285,23 +283,24 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                     fieldNameInput.appendTo(fieldTd);
 
                     /*delete field from table*/
-                    var deleteFieldNameButton = $('<p><span class="glyphicon glyphicon-trash"></p>').click(
+                    var deleteFieldNameButton = $('<p><span class="glyphicon glyphicon-remove"></p>').click(
                         {
                             syllabusName: syllabusName,
                             courseTypeName: courseTypeName,
                             id: contentBundleId,
                             rowId: i,
-                            fieldId: j
+                            fieldId: j + 1
                         },
                         function(ev) {
-                            console.log('/courseStructure/Data/' + ev.data.syllabusName + '/' +
-                                                                                 ev.data.courseTypeName + '/deleteField/' + ev.data.id + '/' + ev.data.fieldId);
+
                             $.ajax({
                                     type: 'GET',
                                     url: '/courseStructure/Data/' + ev.data.syllabusName + '/' +
                                             ev.data.courseTypeName + '/deleteField/' + ev.data.id + '/' + ev.data.fieldId,
                                     success: function (result) {
                                         $('#table_' + ev.data.rowId + 'field_' + ev.data.fieldId).remove();
+                                        $('#courseContentTable tbody').empty();
+                                        loadCourseStructureDesignData(ev.data.syllabusName, ev.data.courseTypeName);
                                     },
                                     error: function (e) {
                                         alert("Failed to delete the field!!");
@@ -311,8 +310,7 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                         }
                     );
                     deleteFieldNameButton.attr('class', 'float-right');
-                    deleteFieldNameButton.attr('role', 'button');
-
+                    deleteFieldNameButton.css('color', 'red');
 
                     deleteFieldNameButton.appendTo(fieldTdDiv);
                     fieldTdDiv.appendTo(fieldTd);
@@ -326,14 +324,14 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                         {
                             syllabusName: syllabusName,
                             courseTypeName: courseTypeName,
-                            id: $(this).attr('id')
+                            id: i + 1
                         },
                         function(ev) {
                             $.ajax({
                                 type: 'GET',
                                 url: '/courseStructure/Data/' + ev.data.syllabusName + '/' + ev.data.courseTypeName +
                                         '/addField/' + ev.data.id,
-                                success: function (result) {
+                                success: function (res) {
                                     $('#courseContentTable tbody').empty();
                                     loadCourseStructureDesignData(syllabusName, courseTypeName);
                                 },
@@ -352,7 +350,11 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                 tableFieldNameTable.append(fieldNameRow);
 
                 var tableFieldNameTableDiv = $('<div></div>');
-                tableFieldNameTableDiv.attr('class', 'fluid card');
+                tableFieldNameTableDiv.attr('class', 'fluid');
+                tableFieldNameTableDiv.css(
+                        'padding', '0'
+                );
+
                 tableFieldNameTable.appendTo(tableFieldNameTableDiv);
                 tableFieldNameTableDiv.appendTo(tableDiv);
 
@@ -360,10 +362,11 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
 
                 /*delete content bundle*/
                 var deleteContentDiv = $('<div></div>');
-                deleteContentDiv.attr('class', 'fluid');
+                deleteContentDiv.attr('class', 'container');
+                deleteContentDiv.css(
+                        'background-color', '#e0e0eb',
+                );
 
-                var deleteContentDiv1 = $('<div></div>');
-                deleteContentDiv1.attr('class', 'fluid');
 
                 var deleteContentButton = $('<p><span class="glyphicon glyphicon-trash"></p>').click(
                     {
@@ -378,7 +381,9 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                                 url: '/courseStructure/Data/' + ev.data.syllabusName + '/' +
                                         ev.data.courseTypeName + '/deleteContentBundle/' + ev.data.id,
                                 success: function (result) {
-                                    $('#contentRow_' + ev.data.rowId).remove();
+                                    $('#contentRow_' + ev.data.rowId).fadeOut(300).remove();
+                                    $('#courseContentTable tbody').empty();
+                                    loadCourseStructureDesignData(ev.data.syllabusName, ev.data.courseTypeName);
                                 },
                                 error: function (e) {
                                     alert("Page Loading Error!!");
@@ -387,11 +392,14 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                         });
                     }
                 );
-                deleteContentButton.attr('class', 'btn btn-danger btn-sm float-left');
+                deleteContentButton.attr('class', 'float-left');
                 deleteContentButton.attr('id', 'contentDeleteButton_' + i);
+                deleteContentButton.css(
+                        'color', 'red',
+                        'padding-top', '5px'
+                );
 
-                deleteContentButton.appendTo(deleteContentDiv1);
-                deleteContentDiv1.appendTo(deleteContentDiv)
+                deleteContentButton.appendTo(deleteContentDiv);
                 deleteContentDiv.appendTo(contentDiv);
 
                 cell.append(contentDiv);
@@ -408,4 +416,89 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
         }
     });
 };
+
+
+/*load form data*/
+var loadFormData = function() {
+    let courseContentTableRowCount = document.getElementById("courseContentTable").rows.length;
+
+    let contentBundleList = [];
+
+    for (let i = 0; i < courseContentTableRowCount; i++) {
+        let textArea = {
+            title : $('#textArea_' + i + 'title').val(),
+            textBody : ''
+        };
+
+        let fields = [];
+        let countOfFieldNamesOfTable = document.getElementById('tableFieldNameTable_' + i).rows[0].cells.length;
+
+        for (let j = 0; j < countOfFieldNamesOfTable - 1; j++) {
+            let tableContentFieldName = $('#table_' + i + 'fieldName_' + j).val();
+            fields.push(tableContentFieldName);
+        }
+
+        let table = {
+            title : $('#table_' + i + 'title').val(),
+            fields : fields,
+            rows : []
+        };
+
+        let contentBundle = {
+            id : i + 1,
+            selected : $('#selector_'.concat(i)).val(),
+            textArea : textArea,
+            table : table
+        };
+
+        contentBundleList.push(contentBundle);
+    }
+
+    let courseStructure = {
+        contentBundleList : contentBundleList
+    };
+
+    return courseStructure;
+};
+
+
+var postFormData = function(courseTypeName) {
+
+    let courseStructure = loadFormData();
+
+    $.ajax({
+        type : 'POST',
+        contentType : 'application/json',
+        url : '/courseStructure/Data/' + $('#syllabusName').text() + '/' + courseTypeName + '/autosave',
+        data : JSON.stringify(courseStructure),
+        dataType : 'json',
+        success : function(result) {
+            if (result.status == 'saved') {
+                $('#statusText1')
+                        .text('saving changes....')
+                        .show()
+                        .fadeOut(500)
+                        .css({
+                            'color' : 'blue'
+                        });
+
+                $('#statusText2')
+                        .delay(1500)
+                        .text('saved!!!')
+                        .show()
+                        .fadeOut(1500)
+                        .css({
+                            "color" : "green"
+                        });
+            } else {
+                alert("Not saved");
+            }
+        },
+        error : function(e) {
+            alert("Changes not saved :(");
+            console.log("Error: ", e);
+        }
+    });
+};
+
 

@@ -1,9 +1,8 @@
 package org.ju.cse.cseju.controller.test;
 
-import org.ju.cse.cseju.message.RequestResponse;
 import org.ju.cse.cseju.model.syllabus.organizer.CourseType;
 import org.ju.cse.cseju.repository.basex.BaseXRepository;
-import org.ju.cse.cseju.service.test.CourseTypeServices;
+import org.ju.cse.cseju.service.syllabus.CourseTypeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

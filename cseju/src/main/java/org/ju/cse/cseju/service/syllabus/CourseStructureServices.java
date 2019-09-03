@@ -1,155 +1,199 @@
 package org.ju.cse.cseju.service.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.CourseStructure;
-import org.ju.cse.cseju.model.syllabus.content.Content;
 import org.ju.cse.cseju.model.syllabus.content.ContentBundle;
-import org.ju.cse.cseju.model.syllabus.content.Table;
-import org.ju.cse.cseju.repository.syllabus.CourseStructureRepository;
+import org.ju.cse.cseju.repository.basex.BaseXRepository;
+import org.ju.cse.cseju.service.jaxb.JAXBServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * @author Kamrul Hasan
+ * @author tshr
  */
-@Service("CourseStructureServices")
+@Service
 public class CourseStructureServices {
+    private static final String PARENT0_NODE = "courseTypes";
+    private static final String PARENT0_NODE_ATTRIBUTE_NAME = "syllabusName";
+    private static final String PARENT1_NODE = "courseType";
+    private static final String PARENT1_NODE_ATTRIBUTE_NAME = "name";
+    private static final String NODE_NAME = "courseStructure";
 
-    private CourseStructureRepository courseStructureRepository = new CourseStructureRepository();
+    private static JAXBServices jaxbServices = new JAXBServices();
 
-    public void createNewCourseStructure(String syllabusName, String courseTypeName) {
-        courseStructureRepository.create(syllabusName, courseTypeName);
-    }
-
-    /**
-     * @param databaseName
-     * @param courseStructure
-     */
-    public void saveOrUpdate(String databaseName, CourseStructure courseStructure) {
-        courseStructure.reinitialize();
-        courseStructureRepository.saveOrUpdate(databaseName, courseStructure);
-    }
+    @Autowired
+    private BaseXRepository baseXRepository;
 
     /**
-     * @param databaseName
+     * @param syllabusName
+     * @param courseType
      * @return CourseStructure
      */
-    public CourseStructure getCourseStructure(String databaseName) {
-        return courseStructureRepository.getCourseStructure(databaseName);
+    public CourseStructure getCourseStructureByCourseType(
+            String syllabusName,
+            String courseType
+    ) {
+        String result = baseXRepository.read(
+                "//" + PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
+                        syllabusName + "\"]//" + PARENT1_NODE + "[@" + PARENT1_NODE_ATTRIBUTE_NAME + "=\"" +
+                        courseType + "\"]/" + NODE_NAME
+        );
+
+        return (CourseStructure) jaxbServices.xmlStringToObject(
+                result,
+                new CourseStructure()
+        );
     }
 
     /**
-     * @param databaseName
+     * @param syllabusName
+     * @param courseType
      */
-    public void addContentBundle(String databaseName) {
-        CourseStructure courseStructure = getCourseStructure(databaseName);
-        courseStructure.addContentBundle();
-        saveOrUpdate(databaseName, courseStructure);
+    public void addContentBundle(
+            String syllabusName,
+            String courseType
+    ) {
+        ContentBundle contentBundle = new ContentBundle();
+        contentBundle = contentBundle.getInitialContentBundle();
+
+        Integer contentBundleId = 0;
+        if (getCountOfContentBundle(syllabusName, courseType) != 0) {
+            contentBundleId = getNextContentBundleId(syllabusName, courseType) + 1;
+        }
+
+        contentBundle.setId(
+                contentBundleId
+        );
+
+        baseXRepository.write(
+                "insert node " +
+                        jaxbServices.objectToXmlString(contentBundle, false) +
+                        " into " +
+                        "//courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseType + "\"]//courseStructure"
+        );
     }
 
     /**
-     * delete a ContentBundle by row index
-     *
-     * @param databaseName
-     * @param contentBundleId
-     */
-    public void deleteContentBundleByContentBundleId(String databaseName,
-                                                     Integer contentBundleId) {
-        CourseStructure courseStructure = getCourseStructure(databaseName);
-        courseStructure.deleteContentBundleByIndex((int) contentBundleId);
-        saveOrUpdate(databaseName, courseStructure);
-    }
-
-    /**
-     * @param databaseName
-     * @param contentBundleId
-     */
-    public void addFieldNameIntoTableByContentBundleId(String databaseName,
-                                                       Integer contentBundleId) {
-        CourseStructure courseStructure = getCourseStructure(databaseName);
-        courseStructure.addFieldIntoTableByContentBundleIndex((int) contentBundleId);
-        saveOrUpdate(databaseName, courseStructure);
-    }
-
-    /**
-     * @param databaseName
-     * @param contentBundleId
-     * @param fieldNameId
-     */
-    public void deleteFieldNameFromTableByContentBundleId(String databaseName,
-                                                          Integer contentBundleId,
-                                                          Integer fieldNameId) {
-        CourseStructure courseStructure = getCourseStructure(databaseName);
-        courseStructure.deleteFieldNameFromTableByContentBundleIndex(contentBundleId, fieldNameId);
-        saveOrUpdate(databaseName, courseStructure);
-    }
-
-
-    /**
-     * @param databaseName
+     * @param syllabusName
+     * @param courseTypeName
      * @return
      */
-    public List<Content> getContentListForPreview(String databaseName) {
-        List<ContentBundle> contentBundleList = getCourseStructure(databaseName).getContentBundleList();
-        List<Content> contentList = new ArrayList<>();
-
-        for (ContentBundle contentBundle : contentBundleList) {
-            if (contentBundle.getSelected() == 0) {
-                contentList.add(contentBundle.getTextArea());
-            } else if (contentBundle.getSelected() == 1) {
-                Table table = contentBundle.getTable();
-                table.addRow(0);
-                contentList.add(table);
-            }
-        }
-        return contentList;
+    private Integer getNextContentBundleId(
+            String syllabusName,
+            String courseTypeName
+    ) {
+        String result = baseXRepository.read(
+                "max(//courseTypes[@syllabusName=\"" + syllabusName +
+                        "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle/[@id])"
+        );
+        if (result == "") return 0;
+        return Integer.parseInt(result);
     }
 
     /**
      * @param syllabusName
      * @param courseType
-     * @return List<Content>
+     * @return CountOfContentBundle
      */
-    public List<Content> getContentList(String syllabusName, String courseType) {
-        List<ContentBundle> contentBundleList = courseStructureRepository
-                .getCourseStructureBySyllabusNameAndCourseType(
-                        syllabusName,
-                        courseType
-                ).getContentBundleList();
-
-        List<Content> contentList = new ArrayList<>();
-
-        for (ContentBundle contentBundle : contentBundleList) {
-            if (contentBundle.getSelected() == 0) {
-                contentList.add(contentBundle.getTextArea());
-            } else if (contentBundle.getSelected() == 1) {
-                Table table = contentBundle.getTable();
-                table.addRow(0);
-                contentList.add(table);
-            }
-        }
-        return contentList;
+    private Integer getCountOfContentBundle(
+            String syllabusName,
+            String courseType
+    ) {
+        return Integer.parseInt(
+                baseXRepository.getCountOfElement(
+                        "count(//courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                                courseType + "\"]//contentBundle)"
+                )
+        );
     }
 
     /**
      * @param syllabusName
-     * @param courseType
+     * @param courseTypeName
+     * @return CourseStructure as XML String
      */
-    public void deleteCourseStructure(String syllabusName, String courseType) {
-        courseStructureRepository.deleteDatabase(syllabusName, courseType);
+    public String getCourseStructure(
+            String syllabusName,
+            String courseTypeName
+    ) {
+        return baseXRepository.read(
+                "//" + PARENT0_NODE + "[@" + PARENT0_NODE_ATTRIBUTE_NAME + "=\"" +
+                        syllabusName + "\"]//" + PARENT1_NODE + "[@" + PARENT1_NODE_ATTRIBUTE_NAME + "=\"" +
+                        courseTypeName + "\"]/" + NODE_NAME
+        );
     }
 
     /**
      * @param syllabusName
-     * @param courseType
-     * @return List<ContentBundle>
+     * @param courseTypeName
+     * @param id
      */
-    public List<ContentBundle> getContentBundleList(String syllabusName, String courseType) {
-        return courseStructureRepository
-                .getCourseStructureBySyllabusNameAndCourseType(
-                        syllabusName,
-                        courseType
-                ).getContentBundleList();
+    public void deleteContentBundle(
+            String syllabusName,
+            String courseTypeName,
+            Integer id
+    ) {
+        baseXRepository.write(
+                "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]//contentBundle[@id=\"" + id + "\"]"
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param id
+     */
+    public void addFieldInTableContent(
+            String syllabusName,
+            String courseTypeName,
+            Integer id
+    ) {
+        baseXRepository.write(
+                "insert node <field>New Field</field> into //courseTypes[@syllabusName=\"" + syllabusName +
+                        "\"]//courseType[@name=\"" + courseTypeName + "\"]//contentBundle[@id=\"" + id + "\"]//fields"
+        );
+    }
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param contentBundleId
+     * @param fieldId
+     */
+    public void deleteFieldNameFromTableContent(
+            String syllabusName,
+            String courseTypeName,
+            Integer contentBundleId,
+            Integer fieldId
+    ) {
+        baseXRepository.write(
+                "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]//contentBundle[@id=\"" + contentBundleId + "\"]//fields/field[" + fieldId + "]"
+        );
+    }
+
+
+    /**
+     * @param syllabusName
+     * @param courseTypeName
+     * @param courseStructure
+     */
+    public void saveOrUpdateCourseStructure(
+            String syllabusName,
+            String courseTypeName,
+            CourseStructure courseStructure
+    ) {
+        /**delete the existing courseStructure**/
+        baseXRepository.write(
+                "delete node //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]/courseStructure"
+        );
+
+        baseXRepository.write(
+                "insert node " + jaxbServices.objectToXmlString(courseStructure, false) +
+                        " into //courseTypes[@syllabusName=\"" + syllabusName + "\"]//courseType[@name=\"" +
+                        courseTypeName + "\"]"
+        );
     }
 }

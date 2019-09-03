@@ -1,4 +1,4 @@
-package org.ju.cse.cseju.service.test;
+package org.ju.cse.cseju.service.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.organizer.CourseType;
 import org.ju.cse.cseju.repository.basex.BaseXRepository;

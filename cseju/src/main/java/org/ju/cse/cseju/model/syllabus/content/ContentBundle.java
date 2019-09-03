@@ -17,7 +17,7 @@ import java.io.Serializable;
 @XmlRootElement(name = "contentBundle")
 public class ContentBundle implements Serializable {
 
-    private Integer contentBundleId;
+    private Integer id;
 
     private Integer selected;
 
@@ -30,8 +30,8 @@ public class ContentBundle implements Serializable {
     }
 
     @XmlAttribute(name = "id")
-    public Integer getContentBundleId() {
-        return contentBundleId;
+    public Integer getId() {
+        return id;
     }
 
     /**

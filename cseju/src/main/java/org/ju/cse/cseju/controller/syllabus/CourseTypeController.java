@@ -2,7 +2,7 @@ package org.ju.cse.cseju.controller.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.clientIO.TextInput;
 import org.ju.cse.cseju.model.syllabus.organizer.CourseType;
-import org.ju.cse.cseju.service.test.CourseTypeServices;
+import org.ju.cse.cseju.service.syllabus.CourseTypeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

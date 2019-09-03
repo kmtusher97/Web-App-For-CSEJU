@@ -33,7 +33,6 @@ public class CourseStructure {
     /**
      * Getters for JAXB xml binding
      */
-    @XmlElementWrapper(name = "contentBundles")
     @XmlElement(name = "contentBundle")
     public List<ContentBundle> getContentBundleList() {
         return contentBundleList;

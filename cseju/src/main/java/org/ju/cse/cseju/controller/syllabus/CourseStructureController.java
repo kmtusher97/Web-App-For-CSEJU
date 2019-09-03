@@ -2,6 +2,7 @@ package org.ju.cse.cseju.controller.syllabus;
 
 import org.ju.cse.cseju.model.syllabus.CourseStructure;
 import org.ju.cse.cseju.service.syllabus.CourseStructureServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,111 +10,76 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author Kamrul Hasan
+ * @author tshr
  */
 @Controller
-@RequestMapping(path = "/course_structure")
+@RequestMapping(path = "/courseStructure")
 public class CourseStructureController {
 
     private static final String SYLLABUS_VIEW_INPUT = "syllabus/input/";
 
-    private CourseStructureServices courseStructureServices = new CourseStructureServices();
+    @Autowired
+    private CourseStructureServices courseStructureServices;
 
     /**
-     * <h3>url: /course_structure/design/{databaseName}</h3>
+     * <h3>url: /courseStructure/design/{syllabusName}/{courseType}</h3>
      *
-     * @param databaseName
+     * @param syllabusName
+     * @param courseType
      * @return ModelAndView CourseInputFromDesignPage
      */
-    @GetMapping("/design/{databaseName}")
-    public ModelAndView getCourseInputFromDesignPage(@PathVariable("databaseName") String databaseName) {
+    @GetMapping("/design/{syllabusName}/{courseType}")
+    public ModelAndView getCourseInputFromDesignPage(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseType") String courseType
+    ) {
         ModelAndView modelAndViewDesignCourseInputForm = new ModelAndView(
                 SYLLABUS_VIEW_INPUT + "courseInputFormDesignPage"
         );
 
-        CourseStructure courseStructure = courseStructureServices.getCourseStructure(databaseName);
-        modelAndViewDesignCourseInputForm.addObject("courseStructure", courseStructure);
+        CourseStructure courseStructure =
+                courseStructureServices.getCourseStructureByCourseType(
+                        syllabusName,
+                        courseType
+                );
+
+        modelAndViewDesignCourseInputForm.addObject(
+                "courseStructure",
+                courseStructure
+        );
+        modelAndViewDesignCourseInputForm.addObject(
+                "syllabusName",
+                syllabusName
+        );
+        modelAndViewDesignCourseInputForm.addObject(
+                "courseType",
+                courseType
+        );
 
         return modelAndViewDesignCourseInputForm;
     }
 
+
     /**
-     * <h3>url: /course_structure/add_ContentBundle/{databaseName}</h3>
+     * <h3>url: /courseStructure/addContentBundle/{syllabusName}/{courseType}</h3>
      *
-     * @param databaseName
-     * @return redirects to /course_structure/design/{databaseName}
+     * @param syllabusName
+     * @param courseType
+     * @return redirects to courseStructure/design/{syllabusName}/{courseType}
      */
-    @GetMapping("/add_ContentBundle/{databaseName}")
-    public ModelAndView addContentBundle(@PathVariable("databaseName") String databaseName) {
-        courseStructureServices.addContentBundle(databaseName);
-
-        return new ModelAndView(
-                "redirect:/course_structure/design/" + databaseName
-        );
-    }
-
-
-    /**
-     * <h3>url: /course_structure/delete_contentBundle/{databaseName}/{contentBundleIndex}</h3>
-     *
-     * @param databaseName
-     * @param contentBundleIndex
-     * @return redirects to /course_structure/design/{databaseName}
-     */
-    @GetMapping("/delete_contentBundle/{databaseName}/{contentBundleIndex}")
-    public ModelAndView deleteContentBundle(
-            @PathVariable("databaseName") String databaseName,
-            @PathVariable("contentBundleIndex") Integer contentBundleIndex) {
-
-        courseStructureServices.deleteContentBundleByContentBundleId(
-                databaseName, contentBundleIndex
-        );
-        return new ModelAndView(
-                "redirect:/course_structure/design/" + databaseName
-        );
-    }
-
-    /**
-     * @param databaseName
-     * @param contentBundleIndex
-     * @return redirects to /course_structure/design/{databaseName}
-     */
-    @GetMapping("/{databaseName}/add_field_/{contentBundleIndex}")
-    public ModelAndView addFieldIntoTable(
-            @PathVariable("databaseName") String databaseName,
-            @PathVariable("contentBundleIndex") Integer contentBundleIndex
+    @GetMapping("/addContentBundle/{syllabusName}/{courseType}")
+    public ModelAndView addContentBundle(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseType") String courseType
     ) {
-        courseStructureServices.addFieldNameIntoTableByContentBundleId(
-                databaseName,
-                contentBundleIndex
+        courseStructureServices.addContentBundle(
+                syllabusName,
+                courseType
         );
 
         return new ModelAndView(
-                "redirect:/course_structure/design/" + databaseName
-        );
-    }
-
-
-    /**
-     * @param databaseName
-     * @param contentBundleIndex
-     * @param fieldNameId
-     * @return redirects to /course_structure/design/{databaseName}
-     */
-    @GetMapping("/{databaseName}/delete_field_/{contentBundleIndex}/{fieldNameId}")
-    public ModelAndView deleteFieldFromTable(
-            @PathVariable("databaseName") String databaseName,
-            @PathVariable("contentBundleIndex") Integer contentBundleIndex,
-            @PathVariable("fieldNameId") Integer fieldNameId
-    ) {
-        courseStructureServices.deleteFieldNameFromTableByContentBundleId(
-                databaseName,
-                contentBundleIndex,
-                fieldNameId
-        );
-
-        return new ModelAndView(
-                "redirect:/course_structure/design/" + databaseName
+                "redirect:/courseStructure/design/" +
+                        syllabusName + "/" + courseType
         );
     }
 }

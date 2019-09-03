@@ -1,11 +1,10 @@
 package org.ju.cse.cseju.controller.syllabus;
 
-import org.ju.cse.cseju.service.test.CourseStructureServices1;
+import org.ju.cse.cseju.message.RequestResponse;
+import org.ju.cse.cseju.model.syllabus.CourseStructure;
+import org.ju.cse.cseju.service.syllabus.CourseStructureServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author tshr
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseStructureRestController {
 
     @Autowired
-    private CourseStructureServices1 courseStructureServices;
+    private CourseStructureServices courseStructureServices;
 
 
     @GetMapping("/{syllabusName}/{courseTypeName}")
@@ -44,11 +43,11 @@ public class CourseStructureRestController {
     }
 
 
-    @GetMapping("/{syllabusName}/{courseTypeName}/deleteContentBundle/{contentBundleId}")
+    @GetMapping("/{syllabusName}/{courseTypeName}/deleteContentBundle/{id}")
     public String deleteContentBundle(
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseTypeName") String courseTypeName,
-            @PathVariable("contentBundleId") Integer id
+            @PathVariable("id") Integer id
     ) {
         courseStructureServices.deleteContentBundle(
                 syllabusName,
@@ -60,11 +59,11 @@ public class CourseStructureRestController {
     }
 
 
-    @GetMapping("/{syllabusName}/{courseTypeName}/addField/{contentBundleId}")
+    @GetMapping("/{syllabusName}/{courseTypeName}/addField/{id}")
     public String addFieldInTableContent(
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseTypeName") String courseTypeName,
-            @PathVariable("contentBundleId") Integer id
+            @PathVariable("id") Integer id
     ) {
         courseStructureServices.addFieldInTableContent(
                 syllabusName,
@@ -76,11 +75,11 @@ public class CourseStructureRestController {
     }
 
 
-    @GetMapping("/{syllabusName}/{courseTypeName}/deleteField/{contentBundleId}/{fieldId}")
+    @GetMapping("/{syllabusName}/{courseTypeName}/deleteField/{id}/{fieldId}")
     public String deleteFieldNameFromTableContent(
             @PathVariable("syllabusName") String syllabusName,
             @PathVariable("courseTypeName") String courseTypeName,
-            @PathVariable("contentBundleId") Integer contentBundleId,
+            @PathVariable("id") Integer contentBundleId,
             @PathVariable("fieldId") Integer fieldId
     ) {
         courseStructureServices.deleteFieldNameFromTableContent(
@@ -91,5 +90,21 @@ public class CourseStructureRestController {
         );
 
         return "fieldDeleted";
+    }
+
+
+    @PostMapping("/{syllabusName}/{courseTypeName}/autosave")
+    public RequestResponse autoSaveChanges(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("courseTypeName") String courseTypeName,
+            @RequestBody CourseStructure courseStructure
+    ) {
+        courseStructureServices.saveOrUpdateCourseStructure(
+                syllabusName,
+                courseTypeName,
+                courseStructure
+        );
+
+        return new RequestResponse("saved", null);
     }
 }
