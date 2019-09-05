@@ -96,24 +96,6 @@ public class BaseXRepository {
 
 
     /**
-     * delete node by attribute value
-     *
-     * @param nodeName
-     * @param attributeName
-     * @param attributeValue
-     */
-    public void delete(
-            String nodeName,
-            String attributeName,
-            String attributeValue
-    ) {
-        write(
-                "delete nodes //" + nodeName +
-                        "[@" + attributeName + "=\"" + attributeValue + "\"]"
-        );
-    }
-
-    /**
      * delete by parent
      *
      * @param parent

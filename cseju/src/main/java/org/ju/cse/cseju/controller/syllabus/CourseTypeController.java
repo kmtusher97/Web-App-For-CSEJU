@@ -25,17 +25,17 @@ public class CourseTypeController {
     public ModelAndView getCourseTypes(
             @PathVariable("syllabusName") String syllabusName
     ) {
-        ModelAndView modelCourseTypePage =
+        ModelAndView modelAndViewCourseTypePage =
                 new ModelAndView(
                         SYLLABUS_VIEW_INPUT + "courseTypePage"
                 );
 
-        modelCourseTypePage.addObject(syllabusName);
-        modelCourseTypePage.addObject(
+        modelAndViewCourseTypePage.addObject(syllabusName);
+        modelAndViewCourseTypePage.addObject(
                 "newCourseType",
                 new TextInput()
         );
-        return modelCourseTypePage;
+        return modelAndViewCourseTypePage;
     }
 
 

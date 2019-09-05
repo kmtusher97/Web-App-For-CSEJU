@@ -6,8 +6,6 @@ $(document).ready(function () {
     var syllabusName = $('#syllabusName').text();
 
     var loadDataFromXML = function () {
-        /*$('#courseTypesTableDiv').show();
-        $('#courseStructureDiv').hide();*/
         hiddenSection1 = $('#sec1');
         hiddenSection2 = $('#sec2');
         $('#sec2').remove();

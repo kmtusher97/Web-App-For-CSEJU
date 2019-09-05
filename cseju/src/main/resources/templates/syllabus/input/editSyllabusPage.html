@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Create Syllabus'}"></title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/syllabus/syllabusCreator.js}"></script>
+</head>
+<body>
+<div id="syllabusCreator"
+     class="container">
+    <section>
+        <div>
+            <h4 id="syllabusName" th:text="${syllabusName}"></h4>
+        </div>
+    </section>
+    <section>
+        <div class="fluid card">
+
+            <table id="syllabusTable"
+                   class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="fluid"
+             style="padding: 10px">
+            <button id="addYear"
+                    class="btn btn-success btn-sm float-left">
+                <b>+ Year</b>
+            </button>
+        </div>
+    </section>
+</div>
+</body>
+</html>
