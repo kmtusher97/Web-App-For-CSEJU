@@ -18,7 +18,7 @@ $(document).ready(function() {
             success: function(xmlString) {
                 console.log(xmlString);
 
-                let yearList = [];
+                /**year row*/
                 $(xmlString).find('year').each(function(index){
                     let yearId = $(this).attr('id');
 
@@ -26,6 +26,20 @@ $(document).ready(function() {
                     yearRow.attr('id', yearId);
 
                     let yearCell = $('<td></td>');
+
+                    /**set row span*/
+                    let rowSpanCount = function(xmlData) {
+                        let rowSpan = 0;
+                        $(xmlData).find('semester').each(function(index1){
+                            let courseCount = $(this).find('course').length;
+                            rowSpan += Math.max(1, courseCount);
+                        });
+                        return Math.max(1, rowSpan);
+                    };
+                    yearCell.attr(
+                            'rowspan',
+                            rowSpanCount($(this))
+                    );
 
                     let yearDiv = $('<div></div>');
                     yearDiv.attr('class', 'container');
@@ -95,21 +109,181 @@ $(document).ready(function() {
 
                     /**view first semester*/
                     if ($(this).find('semester').length > 0) {
-                        console.log($($($(this).find('semester'))[0]).attr('id'));
                         let semester1Cell = $('<td></td>');
+                        semester1Cell.attr(
+                            'rowspan',
+                            Math.max(1, $($(this).find('semester')[0]).find('course').length)
+                        );
+
                         let semester1Div = $('<div></div>');
                         semester1Div.attr('class', 'container');
 
                         let semesterId = $($($(this).find('semester'))[0]).attr('id');
 
                         let semesterName = $('<p></p>').text(
-                                semesterId + getExtension(yearId) + ' Year'
+                                semesterId + getExtension(semesterId) + ' Semester'
                         );
+
+                        semesterName.appendTo(semester1Div);
+
+                        /**menu bar*/
+                        let buttonGroup = $('<div></div>');
+                        buttonGroup.attr('class', 'btn-group');
+                        buttonGroup.attr('role', 'group');
+
+                        /**add course button*/
+                        let semesterActionBtn = $('<button>+ Course</button>').click(
+                            {
+                                syllabusName: syllabusName,
+                                yearId: yearId,
+                                semesterId: semesterId
+                            },
+                            function(ev) {
+                                $.ajax({
+                                        type: 'GET',
+                                        url: '/syllabus/data/' + ev.data.syllabusName + '/' +
+                                              ev.data.yearId + '/' + ev.data.semesterId + '/add/course',
+                                        success: function(addCourseAcknowledgement) {
+                                            loadSyllabus();
+                                        },
+                                        error: function(e) {
+                                            alert("Failed to add course!!");
+                                            console.log("Error: ", e);
+                                        }
+                                });
+                            }
+                        );
+                        semesterActionBtn.attr('type', 'button');
+                        semesterActionBtn.attr('class', 'btn btn-sm btn-success');
+                        semesterActionBtn.appendTo(buttonGroup);
+
+                        /**delete semester button*/
+                        semesterActionBtn = $('<button>Delete Semester</button>').click(
+                            {
+                                syllabusName: syllabusName,
+                                yearId: yearId,
+                                semesterId: semesterId,
+                                courseId: '101'///////////////////////////////////////////////////////
+                            },
+                            function(ev) {
+                                $.ajax({
+                                        type: 'GET',
+                                        url: '/syllabus/data/' + ev.data.syllabusName + '/' +
+                                              ev.data.yearId + '/' + ev.data.semesterId +
+                                              '/delete/course' + ev.data.courseId,
+                                        success: function(deleteCourseAcknowledgement) {
+                                            loadSyllabus();
+                                        },
+                                        error: function(e) {
+                                            alert("Failed to delete course!!");
+                                            console.log("Error: ", e);
+                                        }
+                                });
+                            }
+                        );
+                        semesterActionBtn.attr('type', 'button');
+                        semesterActionBtn.attr('class', 'btn btn-sm btn-danger');
+                        semesterActionBtn.appendTo(buttonGroup);
+
+                        buttonGroup.appendTo(semester1Div);
+
+                        semester1Div.appendTo(semester1Cell);
+                        semester1Cell.appendTo(yearRow);
                     }
 
 
-
+                    /**add year row in syllabusTable*/
                     $('#syllabusTable tbody').append(yearRow);
+
+                    /**semesters from 2 to rest*/
+                    if ($(this).find('semester').length > 1) {
+
+                        $(this).find('semester').each(function(index1){
+
+                            if (index1 != 0) {
+                                let semesterRow = $('<tr></tr>');
+
+                                let semesterCell = $('<td></td>');
+                                let semesterDiv = $('<div></div>');
+                                semesterDiv.attr('class', 'container');
+
+                                let semesterId = $(this).attr('id');
+
+                                let semesterName = $('<p></p>').text(
+                                        semesterId + getExtension(semesterId) + ' Semester'
+                                );
+
+                                semesterName.appendTo(semesterDiv);
+
+                                /**menu bar*/
+                                let buttonGroup = $('<div></div>');
+                                buttonGroup.attr('class', 'btn-group');
+                                buttonGroup.attr('role', 'group');
+
+                                /**add course button*/
+                                let semesterActionBtn = $('<button>+ Course</button>').click(
+                                    {
+                                        syllabusName: syllabusName,
+                                        yearId: yearId,
+                                        semesterId: semesterId
+                                    },
+                                    function(ev) {
+                                        $.ajax({
+                                                type: 'GET',
+                                                url: '/syllabus/data/' + ev.data.syllabusName + '/' +
+                                                      ev.data.yearId + '/' + ev.data.semesterId + '/add/course',
+                                                success: function(addCourseAcknowledgement) {
+                                                    loadSyllabus();
+                                                },
+                                                error: function(e) {
+                                                    alert("Failed to add course!!");
+                                                    console.log("Error: ", e);
+                                                }
+                                        });
+                                    }
+                                );
+                                semesterActionBtn.attr('type', 'button');
+                                semesterActionBtn.attr('class', 'btn btn-sm btn-success');
+                                semesterActionBtn.appendTo(buttonGroup);
+
+                                /**delete semester button*/
+                                semesterActionBtn = $('<button>Delete Semester</button>').click(
+                                    {
+                                        syllabusName: syllabusName,
+                                        yearId: yearId,
+                                        semesterId: semesterId,
+                                        courseCode: '101'///////////////////
+                                    },
+                                    function(ev) {
+                                        $.ajax({
+                                                type: 'GET',
+                                                url: '/syllabus/data/' + ev.data.syllabusName + '/' +
+                                                      ev.data.yearId + '/' + ev.data.semesterId +
+                                                      '/delete/course' + ev.data.courseCode,
+                                                success: function(deleteCourseAcknowledgement) {
+                                                    loadSyllabus();
+                                                },
+                                                error: function(e) {
+                                                    alert("Failed to delete course!!");
+                                                    console.log("Error: ", e);
+                                                }
+                                        });
+                                    }
+                                );
+                                semesterActionBtn.attr('type', 'button');
+                                semesterActionBtn.attr('class', 'btn btn-sm btn-danger');
+                                semesterActionBtn.appendTo(buttonGroup);
+
+                                buttonGroup.appendTo(semesterDiv);
+
+                                semesterDiv.appendTo(semesterCell);
+                                semesterCell.appendTo(semesterRow);
+
+                                /**add semester row in syllabusTable*/
+                                $('#syllabusTable tbody').append(semesterRow);
+                            }
+                        });
+                    }
                 });
             },
             error: function(e) {
