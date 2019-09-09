@@ -31,4 +31,23 @@ public class SyllabusRestController {
         syllabusServices.addYear(syllabusName);
         return "added";
     }
+
+
+    @GetMapping("/{syllabusName}/deleteYear/{yearId}")
+    public String deleteYear(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("yearId") Integer yearId
+    ) {
+        syllabusServices.deleteYearById(syllabusName, yearId);
+        return "yearDeleted";
+    }
+
+    @GetMapping("/{syllabusName}/{yearId}/add/semester")
+    public String addSemesterIntoYear(
+            @PathVariable("syllabusName") String syllabusName,
+            @PathVariable("yearId") Integer yearId
+    ) {
+        syllabusServices.addSemesterIntoYear(syllabusName, yearId);
+        return "semesterAdded";
+    }
 }

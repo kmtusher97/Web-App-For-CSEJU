@@ -295,12 +295,12 @@ var loadCourseStructureDesignData = function(syllabusName, courseTypeName) {
                                     type: 'GET',
                                     url: '/courseStructure/Data/' + ev.data.syllabusName + '/' +
                                             ev.data.courseTypeName + '/deleteField/' + ev.data.id + '/' + ev.data.fieldId,
-                                    success: function (result) {
+                                    success: function(result) {
                                         $('#table_' + ev.data.rowId + 'field_' + ev.data.fieldId).remove();
                                         $('#courseContentTable tbody').empty();
                                         loadCourseStructureDesignData(ev.data.syllabusName, ev.data.courseTypeName);
                                     },
-                                    error: function (e) {
+                                    error: function(e) {
                                         alert("Failed to delete the field!!");
                                         console.log("Error: ", e);
                                     }

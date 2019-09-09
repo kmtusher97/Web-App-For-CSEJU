@@ -24,6 +24,9 @@ public class SyllabusServices {
         );
     }
 
+    /**
+     * @param syllabusName
+     */
     public void addYear(String syllabusName) {
         String[] yearIds = (baseXRepository.read(
                 "for $nd in //syllabus[@name=\"" + syllabusName + "\"]/syllabusData/year return data($nd/[@id])"
@@ -33,16 +36,64 @@ public class SyllabusServices {
         for (String yearId : yearIds) {
             if (yearId == "") break;
             Integer tmp = Integer.parseInt(yearId);
-            if (tmp == mexYear ) {
+            if (tmp == mexYear) {
                 mexYear++;
                 continue;
             }
             break;
         }
 
+        if (mexYear == 1) {
+            baseXRepository.write(
+                    "insert node <year id=\"" + mexYear + "\"/> as first into //syllabus[@name=\"" +
+                            syllabusName + "\"]/syllabusData"
+            );
+        } else {
+            baseXRepository.write(
+                    "insert node <year id=\"" + mexYear + "\"/> after //syllabus[@name=\"" +
+                            syllabusName + "\"]//year[@id=\"" + (mexYear - 1) + "\"]"
+            );
+        }
+    }
+
+    /**
+     * @param syllabusName
+     * @param yearId
+     */
+    public void deleteYearById(String syllabusName, Integer yearId) {
         baseXRepository.write(
-                "insert node <year id=\"" + mexYear + "\"/> into //syllabus[@name=\"" +
-                        syllabusName + "\"]/syllabusData"
+                "delete node //syllabus[@name=\"" + syllabusName + "\"]//year[@id=\"" + yearId + "\"] "
         );
+    }
+
+    /**
+     * @param syllabusName
+     * @param yearId
+     */
+    public void addSemesterIntoYear(String syllabusName, Integer yearId) {
+        String[] semesterIds = (baseXRepository.read(
+                "for $nd in //syllabus[@name=\"" + syllabusName + "\"]/syllabusData/year[@id=\"" + yearId + "\"]//semester return data($nd/[@id])"
+        )).split("\\s+");
+
+        Integer mexSemester = 1;
+        for (String semesterId : semesterIds) {
+            if (semesterId == "") break;
+            Integer tmp = Integer.parseInt(semesterId);
+            if (tmp == mexSemester) {
+                mexSemester++;
+                continue;
+            }
+            break;
+        }
+
+        if (mexSemester == 1) {
+            baseXRepository.write(
+                    "insert node <semester id=\"1\"/> as first into //syllabus[@name=\"" + syllabusName + "\"]//year[@id=\"" + yearId + "\"]"
+            );
+        } else {
+            baseXRepository.write(
+                    "insert node <semester id=\"" + mexSemester + "\"/> after //syllabus[@name=\"" + syllabusName + "\"]//year[@id=\"" + yearId + "\"]//semester[@id=\"" + (mexSemester - 1) + "\"]"
+            );
+        }
     }
 }
